@@ -1,7 +1,4 @@
-package a;
 
-import a.class_17;
-import a.class_5;
 
 // $FF: renamed from: a.b
 public class class_18 {

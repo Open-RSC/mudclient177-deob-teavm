@@ -1,4 +1,3 @@
-package a.a;
 
 import java.awt.Event;
 import java.awt.Frame;

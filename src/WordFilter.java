@@ -1,4 +1,3 @@
-package a;
 
 // $FF: renamed from: a.g
 public class WordFilter {

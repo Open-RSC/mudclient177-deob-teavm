@@ -1,4 +1,3 @@
-package a.a;
 
 import java.io.InputStream;
 

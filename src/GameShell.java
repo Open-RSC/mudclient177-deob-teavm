@@ -1,7 +1,4 @@
-package a.a;
 
-import a.class_18;
-import a.Utility;
 
 import java.applet.Applet;
 import java.awt.Color;

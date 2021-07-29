@@ -1,6 +1,4 @@
-package a;
 
-import a.class_5;
 
 // $FF: renamed from: a.h
 public class class_22 {

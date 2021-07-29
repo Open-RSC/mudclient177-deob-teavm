@@ -1,4 +1,3 @@
-package a.a;
 
 // $FF: renamed from: a.a.e
 public class Panel {

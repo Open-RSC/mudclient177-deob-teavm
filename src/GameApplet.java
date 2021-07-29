@@ -1,8 +1,4 @@
-package a.a;
 
-import a.WordFilter;
-import a.Utility;
-import a.class_22;
 
 import java.awt.Color;
 import java.awt.Font;

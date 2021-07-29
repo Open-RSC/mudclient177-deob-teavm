@@ -1,4 +1,3 @@
-import a.Utility;
 
 // $FF: renamed from: b
 public class GameData {

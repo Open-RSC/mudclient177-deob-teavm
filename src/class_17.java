@@ -1,7 +1,4 @@
-package a;
 
-import a.class_5;
-import a.Utility;
 
 // $FF: renamed from: a.c
 class class_17 {

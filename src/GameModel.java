@@ -1,6 +1,4 @@
-package a.a;
 
-import a.Utility;
 
 import java.io.DataInputStream;
 import java.io.IOException;

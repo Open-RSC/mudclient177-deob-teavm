@@ -1,16 +1,3 @@
-import a.class_18;
-import a.Buffer;
-import a.WordFilter;
-import a.Utility;
-import a.class_22;
-import a.a.GameShell;
-import a.a.GameApplet;
-import a.a.Panel;
-import a.a.StreamAudioPlayer;
-import a.a.GameModel;
-import a.a.ClientStream;
-import a.a.Scene;
-import a.a.Surface;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -816,7 +803,7 @@ public class mudclient extends GameApplet {
 		 }
 
 		 if (var0.length > 5) {
-		 	 a.class_5.reenableOpcodeEncryption = false;
+		 	 class_5.reenableOpcodeEncryption = false;
 		 }
 		 // END INAUTHENTIC COMMAND LINE ARGUMENTS
 
@@ -896,8 +883,8 @@ public class mudclient extends GameApplet {
       // Inauthentic parameter
       try {
          readParam = this.getParameter("disableOpcodeEncryption");
-         a.class_5.reenableOpcodeEncryption = (readParam == null);
-         System.out.println("opcode encryption: " + a.class_5.reenableOpcodeEncryption);
+         class_5.reenableOpcodeEncryption = (readParam == null);
+         System.out.println("opcode encryption: " + class_5.reenableOpcodeEncryption);
       } catch (Exception var5) {
          ;
       }

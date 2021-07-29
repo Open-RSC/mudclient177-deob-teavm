@@ -1,6 +1,4 @@
-package a.a;
 
-import a.a.GameModel;
 
 // $FF: renamed from: a.a.h
 public class Polygon {

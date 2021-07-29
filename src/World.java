@@ -1,6 +1,3 @@
-import a.a.GameModel;
-import a.a.Scene;
-import a.a.Surface;
 
 import java.io.IOException;
 
@@ -1078,9 +1075,9 @@ public class World {
       String mapname = "m" + mapPlane + regionX / 10 + regionX % 10 + regionY / 10 + regionY % 10;
       try {
          if (this.landscapePack != null) {
-            byte[] mapData = a.Utility.loadData(mapname + ".hei", 0, this.landscapePack);
+            byte[] mapData = Utility.loadData(mapname + ".hei", 0, this.landscapePack);
             if ((mapData == null) && (this.memberLandscapePack != null))
-               mapData = a.Utility.loadData(mapname + ".hei", 0, this.memberLandscapePack);
+               mapData = Utility.loadData(mapname + ".hei", 0, this.memberLandscapePack);
             if ((mapData != null) && (mapData.length > 0)) {
                int off = 0;
                int prev_val = 0;
@@ -1136,9 +1133,9 @@ public class World {
                }
             }
 
-            mapData = a.Utility.loadData(mapname + ".dat", 0, this.mapPack);
+            mapData = Utility.loadData(mapname + ".dat", 0, this.mapPack);
             if ((mapData == null) && (this.memberMapPack != null))
-               mapData = a.Utility.loadData(mapname + ".dat", 0, this.memberMapPack);
+               mapData = Utility.loadData(mapname + ".dat", 0, this.memberMapPack);
             if ((mapData == null) || (mapData.length == 0))
                throw new IOException();
 
@@ -1193,7 +1190,7 @@ public class World {
                }
             }
 
-            mapData = a.Utility.loadData(mapname + ".loc", 0, this.mapPack);
+            mapData = Utility.loadData(mapname + ".loc", 0, this.mapPack);
             if ((mapData != null) && (mapData.length > 0)) {
                int off_ = 0;
                for (int tile = 0; tile < 2304;) {
@@ -1207,7 +1204,7 @@ public class World {
             }
          } else {
             byte[] mapData = new byte[20736];
-            a.Utility.readFully("../gamedata/maps/" + mapname + ".jm", mapData, 20736);
+            Utility.readFully("../gamedata/maps/" + mapname + ".jm", mapData, 20736);
             int val = 0;
             int off = 0;
             for (int tile = 0; tile < 2304; tile++) {

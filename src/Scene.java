@@ -1,6 +1,4 @@
-package a.a;
 
-import a.Utility;
 
 // $FF: renamed from: a.a.j
 public class Scene {
