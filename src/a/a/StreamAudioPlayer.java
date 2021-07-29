@@ -1,7 +1,6 @@
 package a.a;
 
 import java.io.InputStream;
-import sun.audio.AudioPlayer;
 
 // $FF: renamed from: a.a.d
 public class StreamAudioPlayer extends InputStream {
@@ -17,12 +16,10 @@ public class StreamAudioPlayer extends InputStream {
    // $FF: renamed from: <init> () void
    public StreamAudioPlayer() {
       super();
-      AudioPlayer.player.start(this);
    }
 
    // $FF: renamed from: a () void
    public void method_318() {
-      AudioPlayer.player.stop(this);
    }
 
    // $FF: renamed from: a (byte[], int, int) void
