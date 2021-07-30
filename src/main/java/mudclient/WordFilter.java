@@ -349,7 +349,7 @@ public class WordFilter {
                   int var17 = method_424(var0, var1, var5);
                   int var18 = method_425(var0, var2, var6 - 1);
                   if(field_995) {
-                     System.out.println("Potential tld: " + var3 + " at char " + var5 + " (type=" + var4 + ", startmatch=" + var17 + ", endmatch=" + var18 + ")");  // authentic System.out.println
+                     System.out.println("Potential tld: " + new String(var3) + " at char " + var5 + " (type=" + var4 + ", startmatch=" + var17 + ", endmatch=" + var18 + ")");  // authentic System.out.println
                   }
 
                   if(var4 == 1 && var17 > 0 && var18 > 0) {
@@ -366,7 +366,7 @@ public class WordFilter {
 
                   if(var8) {
                      if(field_995) {
-                        System.out.println("Filtered tld: " + var3 + " at char " + var5); // authentic System.out.println
+                        System.out.println("Filtered tld: " + new String(var3) + " at char " + var5); // authentic System.out.println
                      }
 
                      int var11 = var5;
@@ -641,7 +641,7 @@ public class WordFilter {
                if(var5 >= var1.length) {
                   var7 = true;
                   if(field_995) {
-                     System.out.println("Potential word: " + var1 + " at char " + var3); // authentic System.out.println
+                     System.out.println("Potential word: " + new String(var1) + " at char " + var3); // authentic System.out.println
                   }
 
                   label249: {
@@ -732,7 +732,7 @@ public class WordFilter {
 
                   if(var7) {
                      if(field_996) {
-                        System.out.println("Filtered word: " + var1 + " at char " + var3); // authentic System.out.println
+                        System.out.println("Filtered word: " + new String(var1) + " at char " + var3); // authentic System.out.println
                      }
 
                      int var19 = var3;

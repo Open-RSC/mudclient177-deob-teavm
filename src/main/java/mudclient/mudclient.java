@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.URL;
 
 public class mudclient extends GameConnection {
    // inauthentic boolean controlling if applet will launch
@@ -811,7 +810,6 @@ public class mudclient extends GameConnection {
 
    // $FF: renamed from: a () void
    public void startGame() {
-      String readParam;
       this.method_24(this.rsaExponent, this.rsaModulus);
       int var7 = 0;
       int var2 = 0;
@@ -3562,9 +3560,9 @@ public class mudclient extends GameConnection {
                         break label933;
                      }
 
-                     if(super.field_26) {
+                     if(super.keyLeftDown) {
                         this.field_133 = this.field_133 + 1 & 7;
-                        super.field_26 = false;
+                        super.keyLeftDown = false;
                         if(!this.fogOfWar) {
                            if((this.field_133 & 1) == 0) {
                               this.field_133 = this.field_133 + 1 & 7;
@@ -3583,12 +3581,12 @@ public class mudclient extends GameConnection {
                         }
                      }
 
-                     if(!super.field_27) {
+                     if(!super.keyRightDown) {
                         break label933;
                      }
 
                      this.field_133 = this.field_133 + 7 & 7;
-                     super.field_27 = false;
+                     super.keyRightDown = false;
                      if(this.fogOfWar) {
                         break label933;
                      }
@@ -3614,14 +3612,14 @@ public class mudclient extends GameConnection {
                      }
                   }
 
-                  if(super.field_26) {
+                  if(super.keyLeftDown) {
                      this.field_135 = this.field_135 + 2 & 255;
                      if(var9 == 0) {
                         break label933;
                      }
                   }
 
-                  if(super.field_27) {
+                  if(super.keyRightDown) {
                      this.field_135 = this.field_135 - 2 & 255;
                   }
                }
@@ -6318,7 +6316,7 @@ public class mudclient extends GameConnection {
 
          this.surface.interlace = false;
          this.surface.blackScreen();
-         this.surface.interlace = super.field_39;
+         this.surface.interlace = super.interlace;
          if(this.lastHeightOffset == 3) {
             var7 = 40 + (int)(Math.random() * 3.0D);
             var8 = 40 + (int)(Math.random() * 7.0D);
@@ -6357,7 +6355,7 @@ public class mudclient extends GameConnection {
             }
 
             label242: {
-               if(!super.field_39) {
+               if(!super.interlace) {
                   this.scene.clipFar3d = 2400;
                   this.scene.clipFar2d = 2400;
                   this.scene.fogZFalloff = 1;
@@ -12606,11 +12604,6 @@ public class mudclient extends GameConnection {
    public Graphics getGraphics() {
       return super.getGraphics();
    }
-
-   /*
-   public Image createImage(int var1, int var2) {
-      return GameShell.gameFrame != null? GameShell.gameFrame.createImage(var1, var2):(link.mainapp != null?link.mainapp.createImage(var1, var2):super.createImage(var1, var2));
-   }*/
 
    // $FF: renamed from: a (java.lang.String, int) java.net.Socket
    public Socket connect(String address, int port) throws IOException {

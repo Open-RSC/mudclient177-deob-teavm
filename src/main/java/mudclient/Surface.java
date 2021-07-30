@@ -77,6 +77,7 @@ public class Surface {
    // $FF: renamed from: <init> (int, int, int, java.awt.Component) void
    public Surface(int width, int height, int var3, mudclient var4) {
       super();
+
       this.interlace = false;
       this.loggedIn = false;
       this.field_731 = var4;
@@ -98,6 +99,7 @@ public class Surface {
       this.field_741 = new int[var3];
       this.field_738 = new int[var3];
       this.field_739 = new int[var3];
+
       if(width > 1 && height > 1 && var4 != null) {
          int var5 = this.field_723 * this.field_724;
          int var6 = 0;

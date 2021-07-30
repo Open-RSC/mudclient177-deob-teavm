@@ -5,6 +5,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 import org.teavm.jso.canvas.ImageData;
+import org.teavm.jso.dom.html.HTMLCanvasElement;
+import org.teavm.jso.dom.html.HTMLDocument;
 
 // $FF: renamed from: a.a.a
 public class GameShell {
@@ -53,18 +55,12 @@ public class GameShell {
    private Graphics graphics;
    // $FF: renamed from: w java.lang.String
    private static String characterMap;
-   // $FF: renamed from: x boolean
-   public boolean field_24;
-   // $FF: renamed from: y boolean
-   public boolean field_25;
    // $FF: renamed from: z boolean
-   public boolean field_26;
+   public boolean keyLeftDown;
    // $FF: renamed from: A boolean
-   public boolean field_27;
+   public boolean keyRightDown;
    // $FF: renamed from: D boolean
-   public boolean field_30;
-   // $FF: renamed from: E boolean
-   public boolean field_31;
+   public boolean keySpaceDown;
    // $FF: renamed from: F int
    public int field_32;
    // $FF: renamed from: G int
@@ -80,7 +76,7 @@ public class GameShell {
    // $FF: renamed from: L int
    public int field_38;
    // $FF: renamed from: M boolean
-   public boolean field_39;
+   public boolean interlace;
    // $FF: renamed from: N java.lang.String
    public String inputTextCurrent;
    // $FF: renamed from: O java.lang.String
@@ -90,6 +86,7 @@ public class GameShell {
    // $FF: renamed from: Q java.lang.String
    public String pmToSend;
 
+   private HTMLCanvasElement canvas;
 
    // $FF: renamed from: a () void
    public void startGame() {}
@@ -113,6 +110,16 @@ public class GameShell {
       this.width = width;
       this.height = height;
       this.loadingStep = 1;
+      
+      this.canvas = (HTMLCanvasElement) HTMLDocument.current().createElement("canvas");
+      this.canvas.setAttribute("tabindex", "-1");
+      this.canvas.setWidth(width);
+      this.canvas.setHeight(height);
+
+      this.graphics = new Graphics(this.canvas);
+
+      HTMLDocument.current().getBody().appendChild(this.canvas);
+
       this.start();
       this.run();
    }
@@ -145,36 +152,21 @@ public class GameShell {
       this.field_37 = var2;
       this.field_38 = var2;
       this.lastMouseAction = 0;
-      if(var2 == 1006) {
-         this.field_26 = true;
+
+      if(var2 == KeyEvent.VK_LEFT) {
+         this.keyLeftDown = true;
       }
 
-      if(var2 == 1007) {
-         this.field_27 = true;
+      if(var2 == KeyEvent.VK_RIGHT) {
+         this.keyRightDown = true;
       }
 
-      if((char)var2 == 32) {
-         this.field_30 = true;
+      if((char)var2 == KeyEvent.VK_SPACE) {
+         this.keySpaceDown = true;
       }
 
-      if((char)var2 == 110 || (char)var2 == 109) {
-         this.field_31 = true;
-      }
-
-      if((char)var2 == 78 || (char)var2 == 77) {
-         this.field_31 = true;
-      }
-
-      if((char)var2 == 123) {
-         this.field_24 = true;
-      }
-
-      if((char)var2 == 125) {
-         this.field_25 = true;
-      }
-
-      if((char)var2 == 1008) {
-         this.field_39 = !this.field_39;
+      if((char)var2 == KeyEvent.VK_F1) {
+         this.interlace = !this.interlace;
       }
 
       boolean var3 = false;
@@ -221,32 +213,16 @@ public class GameShell {
 
    public boolean keyUp(int var2) {
       this.field_37 = 0;
-      if(var2 == 1006) {
-         this.field_26 = false;
+      if(var2 == KeyEvent.VK_LEFT) {
+         this.keyLeftDown = false;
       }
 
-      if(var2 == 1007) {
-         this.field_27 = false;
+      if(var2 == KeyEvent.VK_RIGHT) {
+         this.keyRightDown = false;
       }
 
-      if((char)var2 == 32) {
-         this.field_30 = false;
-      }
-
-      if((char)var2 == 110 || (char)var2 == 109) {
-         this.field_31 = false;
-      }
-
-      if((char)var2 == 78 || (char)var2 == 77) {
-         this.field_31 = false;
-      }
-
-      if((char)var2 == 123) {
-         this.field_24 = false;
-      }
-
-      if((char)var2 == 125) {
-         this.field_25 = false;
+      if((char)var2 == KeyEvent.VK_SPACE) {
+         this.keySpaceDown = false;
       }
 
       return true;
@@ -447,7 +423,7 @@ public class GameShell {
                      }
 
                      this.field_10 = 0;
-                     this.field_39 = true;
+                     this.interlace = true;
                      if(!var11) {
                         break;
                      }
@@ -709,14 +685,11 @@ public class GameShell {
       this.field_18 = new Font("TimesRoman", 0, 15);
       this.field_19 = new Font("Helvetica", 1, 13);
       this.field_20 = new Font("Helvetica", 0, 12);
-      this.field_24 = false;
-      this.field_25 = false;
-      this.field_26 = false;
-      this.field_27 = false;
-      this.field_30 = false;
-      this.field_31 = false;
+      this.keyLeftDown = false;
+      this.keyRightDown = false;
+      this.keySpaceDown = false;
       this.field_32 = 1;
-      this.field_39 = false;
+      this.interlace = false;
       this.inputTextCurrent = "";
       this.inputTextFinal = "";
       this.field_42 = "";
