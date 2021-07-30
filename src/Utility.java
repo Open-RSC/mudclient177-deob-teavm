@@ -381,7 +381,6 @@ public class Utility {
          } while(var4 < var0.length());
       }
 
-      int var5 = 2 + var2 * 10;
       int var6 = 0;
       if(var10 == 0 && var6 >= var2) {
          return 0;
@@ -389,12 +388,10 @@ public class Utility {
          do {
             int var7 = (var1[var6 * 10 + 2] & 255) * 16777216 + (var1[var6 * 10 + 3] & 255) * 65536 + (var1[var6 * 10 + 4] & 255) * 256 + (var1[var6 * 10 + 5] & 255);
             int var8 = (var1[var6 * 10 + 6] & 255) * 65536 + (var1[var6 * 10 + 7] & 255) * 256 + (var1[var6 * 10 + 8] & 255);
-            int var9 = (var1[var6 * 10 + 9] & 255) * 65536 + (var1[var6 * 10 + 10] & 255) * 256 + (var1[var6 * 10 + 11] & 255);
             if(var7 == var3) {
                return var8;
             }
 
-            var5 += var9;
             ++var6;
          } while(var6 < var2);
 

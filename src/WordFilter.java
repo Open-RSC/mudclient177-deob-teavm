@@ -363,13 +363,6 @@ public class WordFilter {
                      var8 = true;
                   }
 
-                  boolean var10000;
-                  if(var4 == 3 && var17 > 2 && var18 > 0) {
-                     var10000 = true;
-                  } else {
-                     var10000 = false;
-                  }
-
                   if(var8) {
                      if(field_995) {
                         System.out.println("Filtered tld: " + var3 + " at char " + var5); // authentic System.out.println

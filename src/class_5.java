@@ -72,8 +72,6 @@ public class class_5 {
    private int field_594;
    // $FF: renamed from: F byte[]
    public byte[] outgoingData;
-   // $FF: renamed from: G int[]
-   private static int[] field_596;
    // $FF: renamed from: H int
    public static int field_597;
 
@@ -430,6 +428,5 @@ public class class_5 {
       field_588[124] = 124;
       field_588[33] = 33;
       field_588[34] = 34;
-      field_596 = new int[]{0, 1, 3, 7, 15, 31, 63, 127, 255, 511, 1023, 2047, 4095, 8191, 16383, 32767, '\uffff', 131071, 262143, 524287, 1048575, 2097151, 4194303, 8388607, 16777215, 33554431, 67108863, 134217727, 268435455, 536870911, 1073741823, Integer.MAX_VALUE, -1};
    }
 }

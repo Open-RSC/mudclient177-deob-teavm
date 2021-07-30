@@ -229,25 +229,6 @@ public class class_18 {
    // $FF: renamed from: b (a.c) void
    private static void method_399(class_17 var0) {
       int var42 = class_5.field_597;
-      boolean var4 = false;
-      boolean var5 = false;
-      boolean var6 = false;
-      boolean var7 = false;
-      boolean var8 = false;
-      boolean var9 = false;
-      boolean var10 = false;
-      boolean var11 = false;
-      boolean var12 = false;
-      boolean var13 = false;
-      boolean var14 = false;
-      boolean var15 = false;
-      boolean var16 = false;
-      boolean var17 = false;
-      boolean var18 = false;
-      boolean var19 = false;
-      boolean var20 = false;
-      boolean var21 = false;
-      boolean var22 = false;
       int var23 = 0;
       int[] var24 = null;
       int[] var25 = null;
@@ -538,7 +519,6 @@ public class class_18 {
          }
 
          int var49 = var0.field_977 + 1;
-         int var54 = 100000 * var0.field_967;
          int var50 = -1;
          byte var51 = 0;
          var43 = 0;

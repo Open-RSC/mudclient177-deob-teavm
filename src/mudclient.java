@@ -1077,8 +1077,6 @@ public class mudclient extends GameApplet {
    // $FF: renamed from: w () void
    public void method_54() {
       int var12 = GameData.field_563;
-      Object var1 = null;
-      Object var2 = null;
       byte[] var13 = this.readDataFile("entity" + Version.entityVer + ".jag", "people and monsters", 30);
       if(var13 == null) {
          this.errorLoadingData = true;
@@ -2199,7 +2197,6 @@ public class mudclient extends GameApplet {
 
    // $FF: renamed from: Q () void
    public void createLoginPanels() {
-      Panel var10001;
       byte var1;
       label11: {
          this.panelLoginWelcome = new Panel(this.surface, 50);;
@@ -2560,7 +2557,6 @@ public class mudclient extends GameApplet {
          } else {
             int var3;
             String var5;
-            ClientStream var10001;
             if(this.loginScreen == 2) {
                this.panelLoginExistingUser.method_275(super.mouseX, super.mouseY, super.lastMouseButtonDown, super.field_35);
                if(this.panelLoginExistingUser.method_276(this.field_358)) {
@@ -8152,7 +8148,6 @@ public class mudclient extends GameApplet {
       short var1 = 400;
       short var2 = 100;
       if(this.field_333) {
-         boolean var5 = true;
          var2 = 300;
       }
 

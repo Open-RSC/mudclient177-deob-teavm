@@ -86,7 +86,6 @@ public class ClientStream extends class_5 implements Runnable {
    public void readStreamBytes(int var1, int var2, byte[] var3) throws IOException {
       if(!this.field_601) {
          int var4 = 0;
-         boolean var5 = false;
          if(Surface.field_759 || var4 < var1) {
             do {
                int var6;

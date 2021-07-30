@@ -510,7 +510,6 @@ public class GameApplet extends GameShell {
                         }
 
                         this.friendOnlineStatus[i] = onlineStatus;
-                        boolean unusedBool = false;
                         this.method_33();
                         return;
                      }

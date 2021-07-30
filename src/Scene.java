@@ -125,8 +125,6 @@ public class Scene {
    int[][] field_700;
    // $FF: renamed from: bi byte[]
    private static byte[] field_701;
-   // $FF: renamed from: bj int[]
-   private static int[] field_702;
    // $FF: renamed from: bk a.a.g
    Surface surface;
    // $FF: renamed from: bl int[]
@@ -214,7 +212,6 @@ public class Scene {
       this.visiblePolygons = new Polygon[var3];
       int var5 = 0;
       Polygon[] var10000;
-      Polygon var10002;
       if(var8) {
          var10000 = this.visiblePolygons;
          var10000[var5] = new Polygon();
@@ -5123,6 +5120,5 @@ public class Scene {
    static {
       field_651 = new int[2048];
       field_652 = new int[512];
-      field_702 = new int[256];
    }
 }

@@ -93,8 +93,6 @@ public class GameModel {
    private static byte[] field_893;
    // $FF: renamed from: Q int[]
    private static int[] field_894;
-   // $FF: renamed from: R int
-   private int field_895;
    // $FF: renamed from: S int
    private int field_896;
    // $FF: renamed from: T int
@@ -175,8 +173,6 @@ public class GameModel {
    protected int field_934;
    // $FF: renamed from: bF int
    private int field_935;
-   // $FF: renamed from: bG int
-   private int field_936;
 
 
    // $FF: renamed from: <init> (int, int) void
@@ -193,7 +189,6 @@ public class GameModel {
       this.field_888 = false;
       this.field_889 = false;
       this.field_890 = false;
-      this.field_895 = 4;
       this.field_896 = 12345678;
       this.field_928 = 12345678;
       this.field_929 = 180;
@@ -227,7 +222,6 @@ public class GameModel {
       this.field_888 = false;
       this.field_889 = false;
       this.field_890 = false;
-      this.field_895 = 4;
       this.field_896 = 12345678;
       this.field_928 = 12345678;
       this.field_929 = 180;
@@ -356,7 +350,6 @@ public class GameModel {
       this.field_888 = false;
       this.field_889 = false;
       this.field_890 = false;
-      this.field_895 = 4;
       this.field_896 = 12345678;
       this.field_928 = 12345678;
       this.field_929 = 180;
@@ -517,7 +510,6 @@ public class GameModel {
       this.field_888 = false;
       this.field_889 = false;
       this.field_890 = false;
-      this.field_895 = 4;
       this.field_896 = 12345678;
       this.field_928 = 12345678;
       this.field_929 = 180;
@@ -526,9 +518,6 @@ public class GameModel {
       this.field_932 = 256;
       this.field_933 = 512;
       this.field_934 = 32;
-      boolean var2 = false;
-      boolean var3 = false;
-      Object var4 = null;
 
       byte[] var26;
       try {
@@ -536,7 +525,6 @@ public class GameModel {
          DataInputStream var6 = new DataInputStream(var5);
          var26 = new byte[3];
          this.field_935 = 0;
-         this.field_936 = 0;
          int var24 = 0;
          if(var22 || var24 < 3) {
             do {
@@ -547,7 +535,6 @@ public class GameModel {
          int var25 = this.method_393(var26);
          var26 = new byte[var25];
          this.field_935 = 0;
-         this.field_936 = 0;
          var24 = 0;
          if(!var22 && var24 >= var25) {
             var6.close();
@@ -568,7 +555,6 @@ public class GameModel {
 
       int var27 = this.method_393(var26);
       int var28 = this.method_393(var26);
-      boolean var14 = false;
       this.method_357(var27, var28);
       this.field_905 = new int[var28][];
       int var15 = 0;
@@ -652,7 +638,6 @@ public class GameModel {
       this.field_888 = false;
       this.field_889 = false;
       this.field_890 = false;
-      this.field_895 = 4;
       this.field_896 = 12345678;
       this.field_928 = 12345678;
       this.field_929 = 180;
@@ -682,7 +667,6 @@ public class GameModel {
       this.field_888 = false;
       this.field_889 = false;
       this.field_890 = false;
-      this.field_895 = 4;
       this.field_896 = 12345678;
       this.field_928 = 12345678;
       this.field_929 = 180;
@@ -900,7 +884,7 @@ public class GameModel {
 
       GameModel[] var23 = new GameModel[var6];
       var14 = 0;
-      GameModel var10002;
+
       if(var22) {
          if(var9[var14] > var7) {
             var9[var14] = var7;
