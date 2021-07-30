@@ -23,9 +23,9 @@ public class GameShell extends Applet implements Runnable {
    public static boolean disableCacheURLLoader = true;
 
    // $FF: renamed from: a int
-   private int field_1;
+   private int width;
    // $FF: renamed from: b int
-   private int field_2;
+   private int height;
    // $FF: renamed from: c java.lang.Thread
    private Thread field_3;
    // $FF: renamed from: d int
@@ -63,9 +63,9 @@ public class GameShell extends Applet implements Runnable {
    // $FF: renamed from: t java.awt.Font
    private Font field_20;
    // $FF: renamed from: u java.awt.Image
-   private Image field_21;
+   private Image jagexLogo;
    // $FF: renamed from: v java.awt.Graphics
-   private Graphics field_22;
+   private Graphics graphics;
    // $FF: renamed from: w java.lang.String
    private static String field_23;
    // $FF: renamed from: x boolean
@@ -129,8 +129,8 @@ public class GameShell extends Applet implements Runnable {
    public final void method_7(int var1, int var2, String var3, boolean var4) {
       this.field_8 = true;
       System.out.println("Started application"); // authentic System.out.println
-      this.field_1 = var1;
-      this.field_2 = var2;
+      this.width = var1;
+      this.height = var2;
       field_7 = new GameFrame(this, var1, var2, var3, var4, false);
       this.field_13 = 1;
       this.field_3 = new Thread(this);
@@ -344,8 +344,8 @@ public class GameShell extends Applet implements Runnable {
    public final void init() {
       this.field_8 = true;
       System.out.println("Started applet"); // authentic System.out.println
-      this.field_1 = 512;
-      this.field_2 = 344;
+      this.width = 512;
+      this.height = 344;
       this.field_13 = 1;
       if (!disableCacheURLLoader)
          Utility.field_1007 = this.getCodeBase();
@@ -412,7 +412,7 @@ public class GameShell extends Applet implements Runnable {
       boolean var11 = Surface.field_759;
       if(this.field_13 == 1) {
          this.field_13 = 2;
-         this.field_22 = this.getGraphics();
+         this.graphics = this.getGraphics();
          this.method_14();
          this.method_15(0, "Loading...");
          this.startGame();
@@ -542,7 +542,7 @@ public class GameShell extends Applet implements Runnable {
    }
 
    public final void paint(Graphics var1) {
-      if(this.field_13 == 2 && this.field_21 != null) {
+      if(this.field_13 == 2 && this.jagexLogo != null) {
          this.method_15(this.field_16, this.field_17);
       } else {
          if(this.field_13 == 0) {
@@ -554,67 +554,67 @@ public class GameShell extends Applet implements Runnable {
 
    // $FF: renamed from: i () void
    public void method_14() {
-      this.field_22.setColor(Color.black);
-      this.field_22.fillRect(0, 0, this.field_1, this.field_2);
-      byte[] var1 = this.readDataFile("jagex.jag", "Jagex library", 0);
-      if(var1 != null) {
-         byte[] var2 = Utility.loadData("logo.tga", 0, var1);
-         this.field_21 = this.method_18(var2);
-         Surface.method_263(Utility.loadData("h11p.jf", 0, var1));
-         Surface.method_263(Utility.loadData("h12b.jf", 0, var1));
-         Surface.method_263(Utility.loadData("h12p.jf", 0, var1));
-         Surface.method_263(Utility.loadData("h13b.jf", 0, var1));
-         Surface.method_263(Utility.loadData("h14b.jf", 0, var1));
-         Surface.method_263(Utility.loadData("h16b.jf", 0, var1));
-         Surface.method_263(Utility.loadData("h20b.jf", 0, var1));
-         Surface.method_263(Utility.loadData("h24b.jf", 0, var1));
+      this.graphics.setColor(Color.black);
+      this.graphics.fillRect(0, 0, this.width, this.height);
+      byte[] jagexJag = this.readDataFile("jagex.jag", "Jagex library", 0);
+      if(jagexJag != null) {
+         byte[] tgaBuffer = Utility.loadData("logo.tga", 0, jagexJag);
+         this.jagexLogo = this.parseTGA(tgaBuffer);
+         Surface.loadFont(Utility.loadData("h11p.jf", 0, jagexJag));
+         Surface.loadFont(Utility.loadData("h12b.jf", 0, jagexJag));
+         Surface.loadFont(Utility.loadData("h12p.jf", 0, jagexJag));
+         Surface.loadFont(Utility.loadData("h13b.jf", 0, jagexJag));
+         Surface.loadFont(Utility.loadData("h14b.jf", 0, jagexJag));
+         Surface.loadFont(Utility.loadData("h16b.jf", 0, jagexJag));
+         Surface.loadFont(Utility.loadData("h20b.jf", 0, jagexJag));
+         Surface.loadFont(Utility.loadData("h24b.jf", 0, jagexJag));
       }
    }
 
    // $FF: renamed from: a (int, java.lang.String) void
    public void method_15(int var1, String var2) {
       try {
-         int var3 = (this.field_1 - 281) / 2;
-         int var4 = (this.field_2 - 148) / 2;
-         this.field_22.setColor(Color.black);
-         this.field_22.fillRect(0, 0, this.field_1, this.field_2);
+         int var3 = (this.width - 281) / 2;
+         int var4 = (this.height - 148) / 2;
+         this.graphics.setColor(Color.black);
+         this.graphics.fillRect(0, 0, this.width, this.height);
          if(!this.field_15) {
-            this.field_22.drawImage(this.field_21, var3, var4, this);
+            this.graphics.drawImage(this.jagexLogo, var3, var4, this);
          }
 
          var3 += 2;
          var4 += 90;
          this.field_16 = var1;
          this.field_17 = var2;
-         this.field_22.setColor(new Color(132, 132, 132));
+         this.graphics.setColor(new Color(132, 132, 132));
          if(this.field_15) {
-            this.field_22.setColor(new Color(220, 0, 0));
+            this.graphics.setColor(new Color(220, 0, 0));
          }
 
-         this.field_22.drawRect(var3 - 2, var4 - 2, 280, 23);
-         this.field_22.fillRect(var3, var4, 277 * var1 / 100, 20);
-         this.field_22.setColor(new Color(198, 198, 198));
+         this.graphics.drawRect(var3 - 2, var4 - 2, 280, 23);
+         this.graphics.fillRect(var3, var4, 277 * var1 / 100, 20);
+         this.graphics.setColor(new Color(198, 198, 198));
          if(this.field_15) {
-            this.field_22.setColor(new Color(255, 255, 255));
+            this.graphics.setColor(new Color(255, 255, 255));
          }
 
          label26: {
-            this.method_17(this.field_22, var2, this.field_18, var3 + 138, var4 + 10);
+            this.drawStringCentred(this.graphics, var2, this.field_18, var3 + 138, var4 + 10);
             if(!this.field_15) {
-               this.method_17(this.field_22, "Created by JAGeX - visit www.jagex.com", this.field_19, var3 + 138, var4 + 30);
-               this.method_17(this.field_22, "©2001-2002 Andrew Gower and Jagex Ltd", this.field_19, var3 + 138, var4 + 44);
+               this.drawStringCentred(this.graphics, "Created by JAGeX - visit www.jagex.com", this.field_19, var3 + 138, var4 + 30);
+               this.drawStringCentred(this.graphics, "©2001-2002 Andrew Gower and Jagex Ltd", this.field_19, var3 + 138, var4 + 44);
                if(!Surface.field_759) {
                   break label26;
                }
             }
 
-            this.field_22.setColor(new Color(132, 132, 152));
-            this.method_17(this.field_22, "©2001-2002 Andrew Gower and Jagex Ltd", this.field_20, var3 + 138, this.field_2 - 20);
+            this.graphics.setColor(new Color(132, 132, 152));
+            this.drawStringCentred(this.graphics, "©2001-2002 Andrew Gower and Jagex Ltd", this.field_20, var3 + 138, this.height - 20);
          }
 
          if(this.field_14 != null) {
-            this.field_22.setColor(Color.white);
-            this.method_17(this.field_22, this.field_14, this.field_19, var3 + 138, var4 - 120);
+            this.graphics.setColor(Color.white);
+            this.drawStringCentred(this.graphics, this.field_14, this.field_19, var3 + 138, var4 - 120);
             return;
          }
       } catch (Exception var5) {
@@ -626,34 +626,34 @@ public class GameShell extends Applet implements Runnable {
    // $FF: renamed from: b (int, java.lang.String) void
    public void showLoadingProgress(int var1, String var2) {
       try {
-         int var3 = (this.field_1 - 281) / 2;
-         int var4 = (this.field_2 - 148) / 2;
+         int var3 = (this.width - 281) / 2;
+         int var4 = (this.height - 148) / 2;
          var3 += 2;
          var4 += 90;
          this.field_16 = var1;
          this.field_17 = var2;
          int var5 = 277 * var1 / 100;
-         this.field_22.setColor(new Color(132, 132, 132));
+         this.graphics.setColor(new Color(132, 132, 132));
          if(this.field_15) {
-            this.field_22.setColor(new Color(220, 0, 0));
+            this.graphics.setColor(new Color(220, 0, 0));
          }
 
-         this.field_22.fillRect(var3, var4, var5, 20);
-         this.field_22.setColor(Color.black);
-         this.field_22.fillRect(var3 + var5, var4, 277 - var5, 20);
-         this.field_22.setColor(new Color(198, 198, 198));
+         this.graphics.fillRect(var3, var4, var5, 20);
+         this.graphics.setColor(Color.black);
+         this.graphics.fillRect(var3 + var5, var4, 277 - var5, 20);
+         this.graphics.setColor(new Color(198, 198, 198));
          if(this.field_15) {
-            this.field_22.setColor(new Color(255, 255, 255));
+            this.graphics.setColor(new Color(255, 255, 255));
          }
 
-         this.method_17(this.field_22, var2, this.field_18, var3 + 138, var4 + 10);
+         this.drawStringCentred(this.graphics, var2, this.field_18, var3 + 138, var4 + 10);
       } catch (Exception var6) {
          ;
       }
    }
 
    // $FF: renamed from: a (java.awt.Graphics, java.lang.String, java.awt.Font, int, int) void
-   public void method_17(Graphics var1, String var2, Font var3, int var4, int var5) {
+   public void drawStringCentred(Graphics var1, String string, Font var3, int x, int y) {
       Object var6;
       label11: {
          if(field_7 == null) {
@@ -667,25 +667,25 @@ public class GameShell extends Applet implements Runnable {
       }
 
       FontMetrics var7 = ((Component)var6).getFontMetrics(var3);
-      var7.stringWidth(var2);
+      var7.stringWidth(string);
       var1.setFont(var3);
-      var1.drawString(var2, var4 - var7.stringWidth(var2) / 2, var5 + var7.getHeight() / 4);
+      var1.drawString(string, x - var7.stringWidth(string) / 2, y + var7.getHeight() / 4);
    }
 
    // $FF: renamed from: a (byte[]) java.awt.Image
-   public Image method_18(byte[] var1) {
+   public Image parseTGA(byte[] tgaBuffer) {
       boolean var14 = Surface.field_759;
-      int var2 = var1[13] * 256 + var1[12];
-      int var3 = var1[15] * 256 + var1[14];
+      int var2 = tgaBuffer[13] * 256 + tgaBuffer[12];
+      int var3 = tgaBuffer[15] * 256 + tgaBuffer[14];
       byte[] var4 = new byte[256];
       byte[] var5 = new byte[256];
       byte[] var6 = new byte[256];
       int var7 = 0;
       if(var14 || var7 < 256) {
          do {
-            var4[var7] = var1[20 + var7 * 3];
-            var5[var7] = var1[19 + var7 * 3];
-            var6[var7] = var1[18 + var7 * 3];
+            var4[var7] = tgaBuffer[20 + var7 * 3];
+            var5[var7] = tgaBuffer[19 + var7 * 3];
+            var6[var7] = tgaBuffer[18 + var7 * 3];
             ++var7;
          } while(var7 < 256);
       }
@@ -707,7 +707,7 @@ public class GameShell extends Applet implements Runnable {
                --var11;
             } else {
                do {
-                  var9[var10++] = var1[786 + var12 + var11 * var2];
+                  var9[var10++] = tgaBuffer[786 + var12 + var11 * var2];
                   ++var12;
                } while(var12 < var2);
 
@@ -760,7 +760,7 @@ public class GameShell extends Applet implements Runnable {
       this.showLoadingProgress(var3, "Unpacking " + var2);
       if(var5 != var4) {
          byte[] var13 = new byte[var4];
-         class_18.method_397(var13, var4, var6, var5, 0);
+         BZLib.method_397(var13, var4, var6, var5, 0);
          return var13;
       } else {
          return var6;
@@ -816,8 +816,8 @@ public class GameShell extends Applet implements Runnable {
    // $FF: renamed from: <init> () void
    public GameShell() {
       super();
-      this.field_1 = 512;
-      this.field_2 = 384;
+      this.width = 512;
+      this.height = 384;
       this.field_4 = 20;
       this.field_5 = 1000;
       this.field_6 = new long[10];

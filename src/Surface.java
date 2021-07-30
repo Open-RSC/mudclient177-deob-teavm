@@ -2726,7 +2726,7 @@ public class Surface implements ImageProducer, ImageObserver {
    }
 
    // $FF: renamed from: a (byte[]) int
-   public static int method_263(byte[] var0) {
+   public static int loadFont(byte[] var0) {
       field_748[field_750] = var0;
       return field_750++;
    }

@@ -8,7 +8,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
 
-public class mudclient extends GameApplet {
+public class mudclient extends GameConnection {
    // inauthentic boolean controlling if applet will launch
    public static boolean disableAppletHostCheck = true;
 
@@ -803,7 +803,7 @@ public class mudclient extends GameApplet {
 		 }
 
 		 if (var0.length > 5) {
-		 	 class_5.reenableOpcodeEncryption = false;
+		 	 Packet.reenableOpcodeEncryption = false;
 		 }
 		 // END INAUTHENTIC COMMAND LINE ARGUMENTS
 
@@ -877,14 +877,14 @@ public class mudclient extends GameApplet {
       }
 
       super.field_11 = 0;
-      GameApplet.maxReadTries = 1000;
-      GameApplet.clientVersion = Version.clientVer;
+      GameConnection.maxReadTries = 1000;
+      GameConnection.clientVersion = Version.clientVer;
 
       // Inauthentic parameter
       try {
          readParam = this.getParameter("disableOpcodeEncryption");
-         class_5.reenableOpcodeEncryption = (readParam == null);
-         System.out.println("opcode encryption: " + class_5.reenableOpcodeEncryption);
+         Packet.reenableOpcodeEncryption = (readParam == null);
+         System.out.println("opcode encryption: " + Packet.reenableOpcodeEncryption);
       } catch (Exception var5) {
          ;
       }
@@ -2581,19 +2581,19 @@ public class mudclient extends GameApplet {
                      return;
                   }
 
-                  this.method_43(GameApplet.loginResponses[6], GameApplet.loginResponses[7]);
+                  this.method_43(GameConnection.loginResponses[6], GameConnection.loginResponses[7]);
 
                   try {
                      super.clientStream = new ClientStream(this.connect(super.address, super.port), this);
-                     super.clientStream.field_591 = GameApplet.maxReadTries;
+                     super.clientStream.field_591 = GameConnection.maxReadTries;
                      super.clientStream.readInt();
                      super.clientStream.newPacket(4, 848);
-                     super.clientStream.putLong(Utility.hashUsername(this.username));
+                     super.clientStream.putLong(Utility.encodeUsername(this.username));
                      super.clientStream.flushPacket();
                      super.clientStream.read();
                      super.clientStream.read();
                      int var11 = super.clientStream.read();
-                     var11 = super.clientStream.method_161(var11, GameApplet.opcodeEncryptionArray);
+                     var11 = super.clientStream.method_161(var11, GameConnection.opcodeEncryptionArray);
                      System.out.println("Getpq response: " + var11); // authentic System.out.println
                      if(var11 == 0) {
                         this.method_43("Sorry, the recovery questions for this user have not been set", "");
@@ -2644,7 +2644,7 @@ public class mudclient extends GameApplet {
                      this.field_390.updateText(this.field_395, "");
                      return;
                   } catch (Exception var9) {
-                     this.method_43(GameApplet.loginResponses[12], GameApplet.loginResponses[13]);
+                     this.method_43(GameConnection.loginResponses[12], GameConnection.loginResponses[13]);
                      return;
                   }
                }
@@ -2663,16 +2663,16 @@ public class mudclient extends GameApplet {
                      return;
                   }
 
-                  this.method_43(GameApplet.loginResponses[6], GameApplet.loginResponses[7]);
+                  this.method_43(GameConnection.loginResponses[6], GameConnection.loginResponses[7]);
 
                   try {
                      super.clientStream = new ClientStream(this.connect(super.address, super.port), this);
-                     super.clientStream.field_591 = GameApplet.maxReadTries;
+                     super.clientStream.field_591 = GameConnection.maxReadTries;
                      var3 = super.clientStream.readInt();
                      String var13 = Utility.method_453(this.field_390.method_308(this.field_393), 20);
                      var5 = Utility.method_453(this.field_390.method_308(this.field_394), 20);
                      super.clientStream.newPacket(8, 121);
-                     super.clientStream.putLong(Utility.hashUsername(this.username));
+                     super.clientStream.putLong(Utility.encodeUsername(this.username));
                      super.clientStream.putInt(this.getRandomDat());
                      super.clientStream.putPassword(var13 + var5, var3, this.rsaExponent, this.rsaModulus);
                      int var6 = 0;
@@ -2696,7 +2696,7 @@ public class mudclient extends GameApplet {
                      super.clientStream.flushPacket();
                      super.clientStream.read();
                      int var14 = super.clientStream.read();
-                     var14 = super.clientStream.method_161(var14, GameApplet.opcodeEncryptionArray);
+                     var14 = super.clientStream.method_161(var14, GameConnection.opcodeEncryptionArray);
                      System.out.println("Recover response: " + var14); // authentic System.out.println
                      if(var14 == 0) {
                         this.loginScreen = 2;
@@ -2715,7 +2715,7 @@ public class mudclient extends GameApplet {
                      this.method_43("Recovery failed! Attempts exceeded?", "");
                      return;
                   } catch (Exception var10) {
-                     this.method_43(GameApplet.loginResponses[12], GameApplet.loginResponses[13]);
+                     this.method_43(GameConnection.loginResponses[12], GameConnection.loginResponses[13]);
                   }
                }
 
@@ -3542,9 +3542,9 @@ public class mudclient extends GameApplet {
                         }
                      }
 
-                     var5 = class_22.prepareToSendChat(var16);
-                     this.sendChat(class_22.pmMessage, var5);
-                     var16 = class_22.readChatString(class_22.pmMessage, 0, var5);
+                     var5 = ChatMessage.prepareToSendChat(var16);
+                     this.sendChat(ChatMessage.pmMessage, var5);
+                     var16 = ChatMessage.readChatString(ChatMessage.pmMessage, 0, var5);
                      var16 = WordFilter.formatChat(var16);
                      this.localPlayer.messageTimer = 150;
                      this.localPlayer.messageSent = var16;
@@ -3815,7 +3815,7 @@ public class mudclient extends GameApplet {
                var3 = var1.indexOf(":");
                if(var3 != -1) {
                   var4 = var1.substring(0, var3);
-                  var5 = Utility.hashUsername(var4);
+                  var5 = Utility.encodeUsername(var4);
                   var7 = 0;
                   if(var8 != 0 || var7 < super.ignoreListCount) {
                      do {
@@ -3834,7 +3834,7 @@ public class mudclient extends GameApplet {
                var3 = var1.indexOf(":");
                if(var3 != -1) {
                   var4 = var1.substring(0, var3);
-                  var5 = Utility.hashUsername(var4);
+                  var5 = Utility.encodeUsername(var4);
                   var7 = 0;
                   if(var8 != 0 || var7 < super.ignoreListCount) {
                      do {
@@ -4557,7 +4557,7 @@ public class mudclient extends GameApplet {
                         messageLength = data[newIndex];
                         ++newIndex;
                         if(mob != null) {
-                           message = WordFilter.formatChat(class_22.readChatString(data, newIndex, messageLength));
+                           message = WordFilter.formatChat(ChatMessage.readChatString(data, newIndex, messageLength));
                            var29 = false;
                            var13 = 0;
                            if(var19 != 0 || var13 < super.ignoreListCount) {
@@ -4653,7 +4653,7 @@ public class mudclient extends GameApplet {
                            newIndex += 2;
                            mob.usernameHash = Utility.getUnsignedLong(data, newIndex);
                            newIndex += 8;
-                           mob.username = Utility.unhashUsername(mob.usernameHash);
+                           mob.username = Utility.decodeUsername(mob.usernameHash);
                            reuseableVar1 = Utility.getUnsignedByte(data[newIndex]); // how many items worn
                            ++newIndex;
                            i = 0;
@@ -4699,7 +4699,7 @@ public class mudclient extends GameApplet {
                         messageLength = data[newIndex];
                         ++newIndex;
                         if(mob != null) {
-                           message = class_22.readChatString(data, newIndex, messageLength);
+                           message = ChatMessage.readChatString(data, newIndex, messageLength);
                            mob.messageTimer = 150;
                            mob.messageSent = message;
                            if(mob == this.localPlayer) {
@@ -4996,7 +4996,7 @@ public class mudclient extends GameApplet {
                         byte var31 = data[newIndex];
                         ++newIndex;
                         if(mob != null) {
-                           String var33 = class_22.readChatString(data, newIndex, var31);
+                           String var33 = ChatMessage.readChatString(data, newIndex, var31);
                            mob.messageTimer = 150;
                            mob.messageSent = var33;
                            if(reuseableVar1 == this.localPlayer.pid) {
@@ -8259,7 +8259,7 @@ public class mudclient extends GameApplet {
          super.inputTextCurrent = "";
          super.inputTextFinal = "";
          if(var6.length() > 0) {
-            long var7 = Utility.hashUsername(var6);
+            long var7 = Utility.encodeUsername(var6);
             super.clientStream.newPacket(51, 277);
             super.clientStream.putLong(var7);
             super.clientStream.putByte(this.reportReason);
@@ -8579,7 +8579,7 @@ public class mudclient extends GameApplet {
             super.inputTextCurrent = "";
             super.inputTextFinal = "";
             this.field_320 = 0;
-            if(messageSent.length() > 0 && Utility.hashUsername(messageSent) != this.localPlayer.usernameHash) {
+            if(messageSent.length() > 0 && Utility.encodeUsername(messageSent) != this.localPlayer.usernameHash) {
                this.friendAdd(messageSent);
             }
          }
@@ -8589,7 +8589,7 @@ public class mudclient extends GameApplet {
          this.surface.drawBox(6, var1, 500, 70, 0);
          this.surface.drawBoxEdge(6, var1, 500, 70, 16777215);
          var1 += 20;
-         this.surface.drawstringCenter("Enter message to send to " + Utility.unhashUsername(this.pmRecipient), 256, var1, 4, 16777215);
+         this.surface.drawstringCenter("Enter message to send to " + Utility.decodeUsername(this.pmRecipient), 256, var1, 4, 16777215);
          var1 += 20;
          this.surface.drawstringCenter(super.field_42 + "*", 256, var1, 4, 16777215);
          if(super.pmToSend.length() > 0) {
@@ -8597,12 +8597,12 @@ public class mudclient extends GameApplet {
             super.field_42 = "";
             super.pmToSend = "";
             this.field_320 = 0;
-            int length = class_22.prepareToSendChat(messageSent);
-            this.sendPrivateChat(this.pmRecipient, class_22.pmMessage, length);
-            messageSent = class_22.readChatString(class_22.pmMessage, 0, length);
+            int length = ChatMessage.prepareToSendChat(messageSent);
+            this.sendPrivateChat(this.pmRecipient, ChatMessage.pmMessage, length);
+            messageSent = ChatMessage.readChatString(ChatMessage.pmMessage, 0, length);
             messageSent = WordFilter.formatChat(messageSent);
 
-            this.displayMessage("@pri@You tell " + Utility.unhashUsername(this.pmRecipient) + ": " + messageSent);
+            this.displayMessage("@pri@You tell " + Utility.decodeUsername(this.pmRecipient) + ": " + messageSent);
          }
       }
 
@@ -8618,7 +8618,7 @@ public class mudclient extends GameApplet {
             super.inputTextCurrent = "";
             super.inputTextFinal = "";
             this.field_320 = 0;
-            if(messageSent.length() > 0 && Utility.hashUsername(messageSent) != this.localPlayer.usernameHash) {
+            if(messageSent.length() > 0 && Utility.encodeUsername(messageSent) != this.localPlayer.usernameHash) {
                this.ignoreAdd(messageSent);
             }
          }
@@ -9387,7 +9387,7 @@ public class mudclient extends GameApplet {
       this.surface.drawBox(var1, var2, 468, 16, 192);
       int var3 = 10000536;
       this.surface.drawBoxAlpha(var1, var2 + 16, 468, 246, var3, 160);
-      this.surface.drawstringCenter("Please confirm your trade with @yel@" + Utility.unhashUsername(this.tradeWithUsername), var1 + 234, var2 + 12, 1, 16777215);
+      this.surface.drawstringCenter("Please confirm your trade with @yel@" + Utility.decodeUsername(this.tradeWithUsername), var1 + 234, var2 + 12, 1, 16777215);
       this.surface.drawstringCenter("You are about to give:", var1 + 117, var2 + 30, 1, 16776960);
       int var4 = 0;
       String var5;
@@ -9812,7 +9812,7 @@ public class mudclient extends GameApplet {
       this.surface.drawBox(var1, var2, 468, 16, 192);
       int var3 = 10000536;
       this.surface.drawBoxAlpha(var1, var2 + 16, 468, 246, var3, 160);
-      this.surface.drawstringCenter("Please confirm your duel with @yel@" + Utility.unhashUsername(this.field_265), var1 + 234, var2 + 12, 1, 16777215);
+      this.surface.drawstringCenter("Please confirm your duel with @yel@" + Utility.decodeUsername(this.field_265), var1 + 234, var2 + 12, 1, 16777215);
       this.surface.drawstringCenter("Your stake:", var1 + 117, var2 + 30, 1, 16776960);
       int var4 = 0;
       String var5;
@@ -11186,7 +11186,7 @@ public class mudclient extends GameApplet {
                   var9 = "@red@";
                }
 
-               this.panelSocialList.method_305(this.controlListSocialPlayers, var8, var9 + Utility.unhashUsername(super.friendNames[var8]) + "~439~@whi@Remove         WWWWWWWWWW");
+               this.panelSocialList.method_305(this.controlListSocialPlayers, var8, var9 + Utility.decodeUsername(super.friendNames[var8]) + "~439~@whi@Remove         WWWWWWWWWW");
                ++var8;
             } while(var8 < super.friendsInList);
          }
@@ -11196,7 +11196,7 @@ public class mudclient extends GameApplet {
          var8 = 0;
          if(var10 != 0 || var8 < super.ignoreListCount) {
             do {
-               this.panelSocialList.method_305(this.controlListSocialPlayers, var8, "@yel@" + Utility.unhashUsername(super.ignoreListAccNames[var8]) + "~439~@whi@Remove         WWWWWWWWWW");
+               this.panelSocialList.method_305(this.controlListSocialPlayers, var8, "@yel@" + Utility.decodeUsername(super.ignoreListAccNames[var8]) + "~439~@whi@Remove         WWWWWWWWWW");
                ++var8;
             } while(var8 < super.ignoreListCount);
          }
@@ -11209,27 +11209,27 @@ public class mudclient extends GameApplet {
             var8 = this.panelSocialList.method_313(this.controlListSocialPlayers);
             if(var8 >= 0 && super.mouseX < 489) {
                if(super.mouseX > 429) {
-                  this.surface.drawstringCenter("Click to remove " + Utility.unhashUsername(super.friendNames[var8]), var2 + var4 / 2, var3 + 35, 1, 16777215);
+                  this.surface.drawstringCenter("Click to remove " + Utility.decodeUsername(super.friendNames[var8]), var2 + var4 / 2, var3 + 35, 1, 16777215);
                   if(var10 == 0) {
                      break label171;
                   }
                }
 
                if(super.friendOnlineStatus[var8] == 99) {
-                  this.surface.drawstringCenter("Click to message " + Utility.unhashUsername(super.friendNames[var8]), var2 + var4 / 2, var3 + 35, 1, 16777215);
+                  this.surface.drawstringCenter("Click to message " + Utility.decodeUsername(super.friendNames[var8]), var2 + var4 / 2, var3 + 35, 1, 16777215);
                   if(var10 == 0) {
                      break label171;
                   }
                }
 
                if(super.friendOnlineStatus[var8] > 0) {
-                  this.surface.drawstringCenter(Utility.unhashUsername(super.friendNames[var8]) + " is on world " + super.friendOnlineStatus[var8], var2 + var4 / 2, var3 + 35, 1, 16777215);
+                  this.surface.drawstringCenter(Utility.decodeUsername(super.friendNames[var8]) + " is on world " + super.friendOnlineStatus[var8], var2 + var4 / 2, var3 + 35, 1, 16777215);
                   if(var10 == 0) {
                      break label171;
                   }
                }
 
-               this.surface.drawstringCenter(Utility.unhashUsername(super.friendNames[var8]) + " is offline", var2 + var4 / 2, var3 + 35, 1, 16777215);
+               this.surface.drawstringCenter(Utility.decodeUsername(super.friendNames[var8]) + " is offline", var2 + var4 / 2, var3 + 35, 1, 16777215);
                if(var10 == 0) {
                   break label171;
                }
@@ -11260,7 +11260,7 @@ public class mudclient extends GameApplet {
                   break label146;
                }
 
-               this.surface.drawstringCenter("Click to remove " + Utility.unhashUsername(super.ignoreListAccNames[var8]), var2 + var4 / 2, var3 + 35, 1, 16777215);
+               this.surface.drawstringCenter("Click to remove " + Utility.decodeUsername(super.ignoreListAccNames[var8]), var2 + var4 / 2, var3 + 35, 1, 16777215);
                if(var10 == 0) {
                   break label146;
                }
@@ -12680,7 +12680,7 @@ public class mudclient extends GameApplet {
          this.showLoadingProgress(var3, "Unpacking " + var2);
          if(var6 != var5) {
             byte[] var9 = new byte[var5];
-            class_18.method_397(var9, var5, var7, var6, 0);
+            BZLib.method_397(var9, var5, var7, var6, 0);
             return var9;
          } else {
             return var7;

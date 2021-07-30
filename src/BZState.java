@@ -1,7 +1,7 @@
 
 
 // $FF: renamed from: a.c
-class class_17 {
+class BZState {
 
    // $FF: renamed from: a int
    final int field_943;
@@ -102,9 +102,9 @@ class class_17 {
 
 
    // $FF: renamed from: <init> () void
-   class_17() {
+   BZState() {
       super();
-      int var1 = class_5.field_597;
+      int var1 = Packet.field_597;
       this.field_943 = 4096;
       this.field_944 = 16;
       this.field_945 = 258;

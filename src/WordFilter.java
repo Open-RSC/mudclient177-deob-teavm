@@ -38,7 +38,7 @@ public class WordFilter {
 
    // $FF: renamed from: a (a.d) void
    public static void method_412(Buffer var0) {
-      int var5 = class_5.field_597;
+      int var5 = Packet.field_597;
       int var1 = var0.method_409();
       field_1004 = new char[var1][];
       field_1005 = new int[var1];
@@ -85,7 +85,7 @@ public class WordFilter {
    public static void method_415(Buffer var0) {
       field_999 = new int[var0.method_409()];
       int var1 = 0;
-      if(class_5.field_597 != 0 || var1 < field_999.length) {
+      if(Packet.field_597 != 0 || var1 < field_999.length) {
          do {
             field_999[var1] = var0.method_408();
             ++var1;
@@ -96,7 +96,7 @@ public class WordFilter {
 
    // $FF: renamed from: a (a.d, char[][], byte[][][]) void
    public static void method_416(Buffer var0, char[][] var1, byte[][][] var2) {
-      int var8 = class_5.field_597;
+      int var8 = Packet.field_597;
       int var3 = 0;
       if(var8 != 0 || var3 < var1.length) {
          do {
@@ -141,7 +141,7 @@ public class WordFilter {
 
    // $FF: renamed from: a (java.lang.String) java.lang.String
    public static String formatChat(String var0) {
-      int var6 = class_5.field_597;
+      int var6 = Packet.field_597;
       char[] var1 = var0.toLowerCase().toCharArray();
       method_422(var1);
       method_420(var1);
@@ -188,7 +188,7 @@ public class WordFilter {
    // $FF: renamed from: a (char[], char[]) void
    public static void method_418(char[] var0, char[] var1) {
       int var2 = 0;
-      if(class_5.field_597 != 0 || var2 < var0.length) {
+      if(Packet.field_597 != 0 || var2 < var0.length) {
          do {
             if(var1[var2] != 42 && method_439(var0[var2])) {
                var1[var2] = var0[var2];
@@ -202,7 +202,7 @@ public class WordFilter {
 
    // $FF: renamed from: a (char[]) void
    public static void method_419(char[] var0) {
-      int var4 = class_5.field_597;
+      int var4 = Packet.field_597;
       boolean var1 = true;
       int var2 = 0;
       if(var4 != 0 || var2 < var0.length) {
@@ -242,7 +242,7 @@ public class WordFilter {
 
    // $FF: renamed from: b (char[]) void
    public static void method_420(char[] var0) {
-      int var3 = class_5.field_597;
+      int var3 = Packet.field_597;
       int var1 = 0;
       if(var3 != 0 || var1 < 2) {
          do {
@@ -265,7 +265,7 @@ public class WordFilter {
    // $FF: renamed from: c (char[]) void
    public static void method_421(char[] var0) {
       int var1 = field_1002.length - 1;
-      if(class_5.field_597 != 0 || var1 >= 0) {
+      if(Packet.field_597 != 0 || var1 >= 0) {
          do {
             method_426(var0, field_1002[var1], field_1003[var1]);
             --var1;
@@ -283,7 +283,7 @@ public class WordFilter {
       char[] var4 = new char[]{'s', 'l', 'a', 's', 'h'};
       method_426(var3, var4, (byte[][])null);
       int var5 = 0;
-      if(class_5.field_597 != 0 || var5 < field_1004.length) {
+      if(Packet.field_597 != 0 || var5 < field_1004.length) {
          do {
             method_423(var0, var1, var3, field_1004[var5], field_1005[var5]);
             ++var5;
@@ -294,7 +294,7 @@ public class WordFilter {
 
    // $FF: renamed from: a (char[], char[], char[], char[], int) void
    public static void method_423(char[] var0, char[] var1, char[] var2, char[] var3, int var4) {
-      int var15 = class_5.field_597;
+      int var15 = Packet.field_597;
       if(var3.length <= var0.length) {
          int var5 = 0;
          if(var15 != 0 || var5 <= var0.length - var3.length) {
@@ -503,7 +503,7 @@ public class WordFilter {
 
    // $FF: renamed from: a (char[], char[], int) int
    public static int method_424(char[] var0, char[] var1, int var2) {
-      int var6 = class_5.field_597;
+      int var6 = Packet.field_597;
       if(var2 == 0) {
          return 2;
       } else {
@@ -542,7 +542,7 @@ public class WordFilter {
 
    // $FF: renamed from: b (char[], char[], int) int
    public static int method_425(char[] var0, char[] var1, int var2) {
-      int var6 = class_5.field_597;
+      int var6 = Packet.field_597;
       if(var2 + 1 == var0.length) {
          return 2;
       } else {
@@ -581,7 +581,7 @@ public class WordFilter {
 
    // $FF: renamed from: a (char[], char[], byte[][]) void
    public static void method_426(char[] var0, char[] var1, byte[][] var2) {
-      int var15 = class_5.field_597;
+      int var15 = Packet.field_597;
       if(var1.length <= var0.length) {
          int var3 = 0;
          if(var15 != 0 || var3 <= var0.length - var1.length) {
@@ -769,7 +769,7 @@ public class WordFilter {
 
                if(var1 < var0[var5][0] || var1 == var0[var5][0] && var2 < var0[var5][1]) {
                   var4 = var5;
-                  if(class_5.field_597 == 0) {
+                  if(Packet.field_597 == 0) {
                      continue;
                   }
                }
@@ -1045,7 +1045,7 @@ public class WordFilter {
 
    // $FF: renamed from: e (char[]) void
    public static void method_431(char[] var0) {
-      int var10 = class_5.field_597;
+      int var10 = Packet.field_597;
       int var1 = 0;
       int var2 = 0;
       int var3 = 0;
@@ -1118,7 +1118,7 @@ public class WordFilter {
    // $FF: renamed from: a (char[], int) int
    public static int method_432(char[] var0, int var1) {
       int var2 = var1;
-      if(class_5.field_597 != 0 || var1 < var0.length && var1 >= 0) {
+      if(Packet.field_597 != 0 || var1 < var0.length && var1 >= 0) {
          do {
             if(var0[var2] >= 48 && var0[var2] <= 57) {
                return var2;
@@ -1134,7 +1134,7 @@ public class WordFilter {
    // $FF: renamed from: b (char[], int) int
    public static int method_433(char[] var0, int var1) {
       int var2 = var1;
-      if(class_5.field_597 == 0 && (var1 >= var0.length || var1 < 0)) {
+      if(Packet.field_597 == 0 && (var1 >= var0.length || var1 < 0)) {
          return var0.length;
       } else {
          do {
@@ -1181,7 +1181,7 @@ public class WordFilter {
 
    // $FF: renamed from: f (char[]) boolean
    public static boolean method_440(char[] var0) {
-      int var7 = class_5.field_597;
+      int var7 = Packet.field_597;
       boolean var1 = true;
       int var2 = 0;
       if(var7 != 0) {
@@ -1230,7 +1230,7 @@ public class WordFilter {
 
    // $FF: renamed from: g (char[]) int
    public static int word2hash(char[] var0) {
-      int var4 = class_5.field_597;
+      int var4 = Packet.field_597;
       if(var0.length > 6) {
          return 0;
       } else {

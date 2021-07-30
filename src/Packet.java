@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 // $FF: renamed from: a.e
-public class class_5 {
+public class Packet {
 
 	// inauthentic boolean used for testing; set to true for original behaviour
 	public static boolean reenableOpcodeEncryption = true;
@@ -77,7 +77,7 @@ public class class_5 {
 
 
    // $FF: renamed from: <init> () void
-   public class_5() {
+   public Packet() {
       super();
       this.field_566 = 3141592;
       this.field_568 = 3141592;

@@ -1,11 +1,11 @@
 
 
 // $FF: renamed from: a.b
-public class class_18 {
+public class BZLib {
 
    // $FF: renamed from: a (byte[], int, byte[], int, int) int
    public static int method_397(byte[] var0, int var1, byte[] var2, int var3, int var4) {
-      class_17 var5 = new class_17();
+      BZState var5 = new BZState();
       var5.field_952 = var2;
       var5.field_953 = var4;
       var5.field_957 = var0;
@@ -25,13 +25,13 @@ public class class_18 {
    }
 
    // $FF: renamed from: a (a.c) void
-   private static void method_398(class_17 var0) {
-      int var15 = class_5.field_597;
+   private static void method_398(BZState var0) {
+      int var15 = Packet.field_597;
       byte var2 = var0.field_962;
       int var3 = var0.field_963;
       int var4 = var0.field_973;
       int var5 = var0.field_971;
-      int[] var6 = class_17.field_976;
+      int[] var6 = BZState.field_976;
       int var7 = var0.field_970;
       byte[] var8 = var0.field_957;
       int var9 = var0.field_958;
@@ -219,7 +219,7 @@ public class class_18 {
       var0.field_963 = var3;
       var0.field_973 = var4;
       var0.field_971 = var5;
-      class_17.field_976 = var6;
+      BZState.field_976 = var6;
       var0.field_970 = var7;
       var0.field_957 = var8;
       var0.field_958 = var9;
@@ -227,15 +227,15 @@ public class class_18 {
    }
 
    // $FF: renamed from: b (a.c) void
-   private static void method_399(class_17 var0) {
-      int var42 = class_5.field_597;
+   private static void method_399(BZState var0) {
+      int var42 = Packet.field_597;
       int var23 = 0;
       int[] var24 = null;
       int[] var25 = null;
       int[] var26 = null;
       var0.field_967 = 1;
-      if(class_17.field_976 == null) {
-         class_17.field_976 = new int[var0.field_967 * 100000];
+      if(BZState.field_976 == null) {
+         BZState.field_976 = new int[var0.field_967 * 100000];
       }
 
       boolean var27 = true;
@@ -649,7 +649,7 @@ public class class_18 {
                var0.field_972[var1 & 255] += var56;
                if(var42 != 0 || var56 > 0) {
                   do {
-                     class_17.field_976[var55] = var1 & 255;
+                     BZState.field_976[var55] = var1 & 255;
                      ++var55;
                      --var56;
                   } while(var56 > 0);
@@ -737,7 +737,7 @@ public class class_18 {
             }
 
             ++var0.field_972[var0.field_980[var1 & 255] & 255];
-            class_17.field_976[var55] = var0.field_980[var1 & 255] & 255;
+            BZState.field_976[var55] = var0.field_980[var1 & 255] & 255;
             ++var55;
             if(var52 == 0) {
                ++var50;
@@ -792,22 +792,22 @@ public class class_18 {
 
          var43 = 0;
          if(var42 != 0) {
-            var1 = (byte)(class_17.field_976[var43] & 255);
-            class_17.field_976[var0.field_974[var1 & 255]] |= var43 << 8;
+            var1 = (byte)(BZState.field_976[var43] & 255);
+            BZState.field_976[var0.field_974[var1 & 255]] |= var43 << 8;
             ++var0.field_974[var1 & 255];
             ++var43;
          }
 
          while(var43 < var55) {
-            var1 = (byte)(class_17.field_976[var43] & 255);
-            class_17.field_976[var0.field_974[var1 & 255]] |= var43 << 8;
+            var1 = (byte)(BZState.field_976[var43] & 255);
+            BZState.field_976[var0.field_974[var1 & 255]] |= var43 << 8;
             ++var0.field_974[var1 & 255];
             ++var43;
          }
 
-         var0.field_970 = class_17.field_976[var0.field_969] >> 8;
+         var0.field_970 = BZState.field_976[var0.field_969] >> 8;
          var0.field_973 = 0;
-         var0.field_970 = class_17.field_976[var0.field_970];
+         var0.field_970 = BZState.field_976[var0.field_970];
          var0.field_971 = (byte)(var0.field_970 & 255);
          var0.field_970 >>= 8;
          ++var0.field_973;
@@ -826,22 +826,22 @@ public class class_18 {
    }
 
    // $FF: renamed from: c (a.c) byte
-   private static byte method_400(class_17 var0) {
+   private static byte method_400(BZState var0) {
       return (byte)method_402(8, var0);
    }
 
    // $FF: renamed from: d (a.c) byte
-   private static byte method_401(class_17 var0) {
+   private static byte method_401(BZState var0) {
       return (byte)method_402(1, var0);
    }
 
    // $FF: renamed from: a (int, a.c) int
-   private static int method_402(int var0, class_17 var1) {
+   private static int method_402(int var0, BZState var1) {
       while(true) {
          if(var1.field_966 >= var0) {
             int var3 = var1.field_965 >> var1.field_966 - var0 & (1 << var0) - 1;
             var1.field_966 -= var0;
-            if(class_5.field_597 == 0) {
+            if(Packet.field_597 == 0) {
                return var3;
             }
          }
@@ -858,10 +858,10 @@ public class class_18 {
    }
 
    // $FF: renamed from: e (a.c) void
-   private static void method_403(class_17 var0) {
+   private static void method_403(BZState var0) {
       var0.field_977 = 0;
       int var1 = 0;
-      if(class_5.field_597 != 0 || var1 < 256) {
+      if(Packet.field_597 != 0 || var1 < 256) {
          do {
             if(var0.field_978[var1]) {
                var0.field_980[var0.field_977] = (byte)var1;
@@ -876,7 +876,7 @@ public class class_18 {
 
    // $FF: renamed from: a (int[], int[], int[], byte[], int, int, int) void
    private static void method_404(int[] var0, int[] var1, int[] var2, byte[] var3, int var4, int var5, int var6) {
-      int var11 = class_5.field_597;
+      int var11 = Packet.field_597;
       int var7 = 0;
       int var8 = var4;
       int var9;

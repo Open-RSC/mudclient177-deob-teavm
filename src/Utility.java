@@ -23,7 +23,7 @@ public class Utility {
       Object var1;
       if(field_1007 == null) {
          var1 = new BufferedInputStream(new FileInputStream(var0));
-         if(class_5.field_597 == 0) {
+         if(Packet.field_597 == 0) {
             return (InputStream)var1;
          }
       }
@@ -92,7 +92,7 @@ public class Utility {
 
    // $FF: renamed from: b (byte[], int, int) int
    public static int readBits(byte[] var0, int var1, int var2) {
-      int var6 = class_5.field_597;
+      int var6 = Packet.field_597;
       int var3 = var1 >> 3;
       int var4 = 8 - (var1 & 7);
       int var5 = 0;
@@ -121,7 +121,7 @@ public class Utility {
 
    // $FF: renamed from: a (java.lang.String, int) java.lang.String
    public static String method_453(String var0, int var1) {
-      int var5 = class_5.field_597;
+      int var5 = Packet.field_597;
       String var2 = "";
       int var3 = 0;
       if(var5 == 0 && var3 >= var1) {
@@ -173,7 +173,7 @@ public class Utility {
       var0 = var0.toLowerCase();
       String var2 = "";
       int var3 = 0;
-      if(class_5.field_597 != 0 || var3 < var0.length() && var3 < var1) {
+      if(Packet.field_597 != 0 || var3 < var0.length() && var3 < var1) {
          do {
             char var4 = var0.charAt(var3);
             if(var4 >= 97 && var4 <= 122) {
@@ -197,8 +197,8 @@ public class Utility {
    }
 
    // $FF: renamed from: b (java.lang.String) long
-   public static long hashUsername(String var0) {
-      int var7 = class_5.field_597;
+   public static long encodeUsername(String var0) {
+      int var7 = Packet.field_597;
       String var1 = "";
       int var2 = 0;
       char var3;
@@ -292,8 +292,8 @@ public class Utility {
    }
 
    // $FF: renamed from: a (long) java.lang.String
-   public static String unhashUsername(long var0) {
-      int var4 = class_5.field_597;
+   public static String decodeUsername(long var0) {
+      int var4 = Packet.field_597;
       if(var0 < 0L) {
          return "invalid_name";
       } else {
@@ -335,7 +335,7 @@ public class Utility {
 
    // $FF: renamed from: a (java.lang.String, byte[]) int
    public static int getDataFileOffset(String var0, byte[] var1) {
-      int var9 = class_5.field_597;
+      int var9 = Packet.field_597;
       int var2 = readUnsignedShort(var1, 0);
       int var3 = 0;
       var0 = var0.toUpperCase();
@@ -369,7 +369,7 @@ public class Utility {
 
    // $FF: renamed from: b (java.lang.String, byte[]) int
    public static int getDataFileLength(String var0, byte[] var1) {
-      int var10 = class_5.field_597;
+      int var10 = Packet.field_597;
       int var2 = readUnsignedShort(var1, 0);
       int var3 = 0;
       var0 = var0.toUpperCase();
@@ -406,7 +406,7 @@ public class Utility {
 
    // $FF: renamed from: a (java.lang.String, int, byte[], byte[]) byte[]
    public static byte[] method_461(String var0, int var1, byte[] var2, byte[] var3) {
-      int var13 = class_5.field_597;
+      int var13 = Packet.field_597;
       int var4 = (var2[0] & 255) * 256 + (var2[1] & 255);
       int var5 = 0;
       var0 = var0.toUpperCase();
@@ -433,7 +433,7 @@ public class Utility {
                }
 
                if(var10 != var11) {
-                  class_18.method_397(var3, var10, var2, var11, var7);
+                  BZLib.method_397(var3, var10, var2, var11, var7);
                   if(var13 == 0) {
                      return var3;
                   }

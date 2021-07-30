@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 // $FF: renamed from: a.a.k
-public class ClientStream extends class_5 implements Runnable {
+public class ClientStream extends Packet implements Runnable {
 
    // $FF: renamed from: I java.io.InputStream
    private InputStream instream;

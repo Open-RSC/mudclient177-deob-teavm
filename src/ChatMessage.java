@@ -1,7 +1,7 @@
 
 
 // $FF: renamed from: a.h
-public class class_22 {
+public class ChatMessage {
 
    // $FF: renamed from: a byte[]
    public static byte[] pmMessage;
@@ -13,7 +13,7 @@ public class class_22 {
 
    // $FF: renamed from: a (byte[], int, int) java.lang.String
    public static String readChatString(byte[] data, int dataIndex, int strLength) {
-      int var9 = class_5.field_597;
+      int var9 = Packet.field_597;
       int formattedLength = 0;
       int var4 = -1;
       int stringIndex = 0;
@@ -99,7 +99,7 @@ public class class_22 {
 
    // $FF: renamed from: a (java.lang.String) int
    public static int prepareToSendChat(String messageToSend) {
-      int var7 = class_5.field_597;
+      int var7 = Packet.field_597;
       if(messageToSend.length() > 80) {
          messageToSend = messageToSend.substring(0, 80);
       }

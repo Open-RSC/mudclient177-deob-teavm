@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 // $FF: renamed from: a.a.b
-public class GameApplet extends GameShell {
+public class GameConnection extends GameShell {
 
    // $FF: renamed from: R java.lang.String[]
    public static String[] loginResponses;
@@ -138,7 +138,7 @@ public class GameApplet extends GameShell {
 
                this.clientStream.putShort(clientVersion);
                this.clientStream.putShort(limit30);
-               this.clientStream.putLong(Utility.hashUsername(username));
+               this.clientStream.putLong(Utility.encodeUsername(username));
                this.clientStream.putPassword(password, sessionId, this.field_64, this.field_65);
                this.clientStream.putInt(this.getRandomDat());
                this.clientStream.flushPacket();
@@ -284,8 +284,8 @@ public class GameApplet extends GameShell {
       var3.fillRect(var5 / 2 - 140, var6 / 2 - 25, 280, 50);
       var3.setColor(Color.white);
       var3.drawRect(var5 / 2 - 140, var6 / 2 - 25, 280, 50);
-      this.method_17(var3, var1, var4, var5 / 2, var6 / 2 - 10);
-      this.method_17(var3, var2, var4, var5 / 2, var6 / 2 + 10);
+      this.drawStringCentred(var3, var1, var4, var5 / 2, var6 / 2 - 10);
+      this.drawStringCentred(var3, var2, var4, var5 / 2, var6 / 2 + 10);
    }
 
    // $FF: renamed from: b (java.lang.String, java.lang.String) void
@@ -329,7 +329,7 @@ public class GameApplet extends GameShell {
 
             this.clientStream.newPacket(2, 129);
             this.clientStream.putShort(clientVersion);
-            this.clientStream.putLong(Utility.hashUsername(username));
+            this.clientStream.putLong(Utility.encodeUsername(username));
             this.clientStream.putShort(referId);
             this.clientStream.putPassword(password, sessionId, this.field_64, this.field_65);
             this.clientStream.putInt(this.getRandomDat());
@@ -470,8 +470,8 @@ public class GameApplet extends GameShell {
                      this.field_63 = this.incomingBytes[4];
                   } else if(opcode == 28) {
                      usernameHash = Utility.getUnsignedLong(this.incomingBytes, 1); // username hash
-                     String var11 = WordFilter.formatChat(class_22.readChatString(this.incomingBytes, 9, packetLength - 9));
-                     this.displayMessage("@pri@" + Utility.unhashUsername(usernameHash) + ": tells you " + var11);
+                     String var11 = WordFilter.formatChat(ChatMessage.readChatString(this.incomingBytes, 9, packetLength - 9));
+                     this.displayMessage("@pri@" + Utility.decodeUsername(usernameHash) + ": tells you " + var11);
                   } else {
                      this.method_49(opcode, packetLength, this.incomingBytes);
                   }
@@ -496,17 +496,17 @@ public class GameApplet extends GameShell {
                   this.friendNames[this.friendsInList] = usernameHash;
                   this.friendOnlineStatus[this.friendsInList] = onlineStatus;
                   ++this.friendsInList;
-                  this.displayMessage("@pri@" + Utility.unhashUsername(usernameHash) + " has been added to your friends list");
+                  this.displayMessage("@pri@" + Utility.decodeUsername(usernameHash) + " has been added to your friends list");
                   this.method_33();
                } else {
                   do {
                      if(this.friendNames[i] == usernameHash) {
                         if(this.friendOnlineStatus[i] == 0 && onlineStatus != 0) {
-                           this.displayMessage("@pri@" + Utility.unhashUsername(usernameHash) + " has logged in");
+                           this.displayMessage("@pri@" + Utility.decodeUsername(usernameHash) + " has logged in");
                         }
 
                         if(this.friendOnlineStatus[i] != 0 && onlineStatus == 0) {
-                           this.displayMessage("@pri@" + Utility.unhashUsername(usernameHash) + " has logged out");
+                           this.displayMessage("@pri@" + Utility.decodeUsername(usernameHash) + " has logged out");
                         }
 
                         this.friendOnlineStatus[i] = onlineStatus;
@@ -520,7 +520,7 @@ public class GameApplet extends GameShell {
                   this.friendNames[this.friendsInList] = usernameHash;
                   this.friendOnlineStatus[this.friendsInList] = onlineStatus;
                   ++this.friendsInList;
-                  this.displayMessage("@pri@" + Utility.unhashUsername(usernameHash) + " has been added to your friends list");
+                  this.displayMessage("@pri@" + Utility.decodeUsername(usernameHash) + " has been added to your friends list");
                   this.method_33();
                }
             }
@@ -592,7 +592,7 @@ public class GameApplet extends GameShell {
 
    // $FF: renamed from: a (java.lang.String) void
    public void ignoreAdd(String var1) {
-      long var2 = Utility.hashUsername(var1);
+      long var2 = Utility.encodeUsername(var1);
       this.clientStream.newPacket(29, 101);
       this.clientStream.putLong(var2);
       this.clientStream.flushPacket_();
@@ -648,7 +648,7 @@ public class GameApplet extends GameShell {
    // $FF: renamed from: b (java.lang.String) void
    public void friendAdd(String var1) {
       this.clientStream.newPacket(26, 622);
-      this.clientStream.putLong(Utility.hashUsername(var1));
+      this.clientStream.putLong(Utility.encodeUsername(var1));
       this.clientStream.flushPacket_();
    }
 
@@ -681,7 +681,7 @@ public class GameApplet extends GameShell {
          } while(var3 < this.friendsInList);
       }
 
-      this.displayMessage("@pri@" + Utility.unhashUsername(var1) + " has been removed from your friends list");
+      this.displayMessage("@pri@" + Utility.decodeUsername(var1) + " has been removed from your friends list");
    }
 
    // $FF: renamed from: a (long, byte[], int) void
@@ -736,7 +736,7 @@ public class GameApplet extends GameShell {
    }
 
    // $FF: renamed from: <init> () void
-   public GameApplet() {
+   public GameConnection() {
       super();
       this.address = "127.0.0.1";
       this.port = '\uaa4a';
