@@ -1,4 +1,4 @@
-import java.awt.Component;
+package mudclient;
 
 // $FF: renamed from: d
 public class SurfaceSprite extends Surface {
@@ -8,7 +8,7 @@ public class SurfaceSprite extends Surface {
 
 
    // $FF: renamed from: <init> (int, int, int, java.awt.Component) void
-   public SurfaceSprite(int width, int height, int var3, Component component) {
+   public SurfaceSprite(int width, int height, int var3, mudclient component) {
       super(width, height, var3, component);
    }
 

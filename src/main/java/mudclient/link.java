@@ -1,9 +1,9 @@
-import java.applet.Applet;
+package mudclient;
+
 import java.net.Socket;
 
 public class link {
 
-   public static Applet mainapp;
    public static int uid;
    static int socketport;
    // $FF: renamed from: s java.net.Socket

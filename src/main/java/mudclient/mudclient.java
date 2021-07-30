@@ -1,7 +1,5 @@
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Image;
+package mudclient;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.InetAddress;
@@ -775,7 +773,7 @@ public class mudclient extends GameConnection {
    // $FF: renamed from: iI java.lang.String
    String sleepingStatusText;
    // $FF: renamed from: iJ java.lang.String[]
-   String[] field_450;
+   String[] recoveryQuestions;
 
 
    public static void main(String[] var0) {
@@ -807,40 +805,13 @@ public class mudclient extends GameConnection {
 		 }
 		 // END INAUTHENTIC COMMAND LINE ARGUMENTS
 
-      var1.method_7(var1.gameWidth, var1.gameHeight + 11, "Runescape by Andrew Gower", false);
+      var1.startApplication(var1.gameWidth, var1.gameHeight + 11, "Runescape by Andrew Gower", false);
       var1.field_32 = 10;
    }
 
    // $FF: renamed from: a () void
    public void startGame() {
       String readParam;
-
-      if(this.appletMode && !disableAppletHostCheck) {
-         String var1 = this.getDocumentBase().getHost().toLowerCase();
-         if(!var1.endsWith("jagex.com") && !var1.endsWith("jagex.co.uk") && !var1.endsWith("runescape.com") && !var1.endsWith("runescape.co.uk") && !var1.endsWith("runescape.net") && !var1.endsWith("runescape.org") && !var1.endsWith("penguin") && !var1.endsWith("puffin")) {
-            this.errorLoadingCodebase = true;
-            return;
-         }
-      }
-
-      // Inauthentic parameter
-      try {
-         readParam = this.getParameter("exponent");
-         rsaExponent = new BigInteger(readParam);
-         System.out.println("exponent: " + rsaExponent);
-      } catch (Exception var5) {
-         ;
-      }
-
-      // Inauthentic parameter
-      try {
-         readParam = this.getParameter("modulus");
-         rsaModulus = new BigInteger(readParam);
-         System.out.println("modulus: " + rsaModulus);
-      } catch (Exception var5) {
-         ;
-      }
-
       this.method_24(this.rsaExponent, this.rsaModulus);
       int var7 = 0;
       int var2 = 0;
@@ -862,62 +833,16 @@ public class mudclient extends GameConnection {
          ++var2;
       }
 
-      try {
-         readParam = this.getParameter("member");
-         var4 = Integer.parseInt(readParam);
-         if(var4 == 1) {
-            this.members = true;
-         }
-      } catch (Exception var6) {
-         ;
-      }
-
       if(this.appletMode) {
-         super.port = '\uaa4a';
+         super.port = 43594;
       }
 
-      super.field_11 = 0;
+      super.offsetY = 0;
       GameConnection.maxReadTries = 1000;
       GameConnection.clientVersion = Version.clientVer;
 
-      // Inauthentic parameter
-      try {
-         readParam = this.getParameter("disableOpcodeEncryption");
-         Packet.reenableOpcodeEncryption = (readParam == null);
-         System.out.println("opcode encryption: " + Packet.reenableOpcodeEncryption);
-      } catch (Exception var5) {
-         ;
-      }
-
-      // Inauthentic parameter
-      try {
-         readParam = this.getParameter("port");
-         var4 = Integer.parseInt(readParam);
-         super.port = var4;
-         System.out.println("port: " + var4);
-      } catch (Exception var5) {
-         ;
-      }
-
-      // Inauthentic parameter
-      try {
-         readParam = this.getParameter("ip");
-         super.address = readParam;
-         System.out.println("address: " + readParam);
-      } catch (Exception var5) {
-         ;
-      }
-
-      try {
-         readParam = this.getParameter("poff");
-         var4 = Integer.parseInt(readParam);
-         super.port += var4;
-         System.out.println("Offset: " + var4); // authentic System.out.println
-      } catch (Exception var5) {
-         ;
-      }
-
       this.loadGameConfig();
+
       if(!this.errorLoadingData) {
          this.spriteMedia = 2000;
          this.spriteUtil = this.spriteMedia + 100;
@@ -1266,7 +1191,7 @@ public class mudclient extends GameConnection {
       GameData.getModelIndex("spellcharge2");
       GameData.getModelIndex("spellcharge3");
       GameModel[] var10000;
-      if(this.method_8()) {
+      if(this.isApplication()) {
          byte[] var5 = this.readDataFile("models" + Version.modelsVer + ".jag", "3d models", 60);
          if(var5 == null) {
             this.errorLoadingData = true;
@@ -1296,21 +1221,6 @@ public class mudclient extends GameConnection {
                } while(var2 < GameData.modelCount);
 
             }
-         }
-      } else {
-         this.showLoadingProgress(70, "Loading 3d models");
-         int var1 = 0;
-         if(var4 != 0 || var1 < GameData.modelCount) {
-            do {
-               var10000 = this.gameModels;
-               var10000[var1] = new GameModel("../gamedata/models/" + GameData.modelName[var1] + ".ob2");
-               if(GameData.modelName[var1].equals("giantcrystal")) {
-                  this.gameModels[var1].transparent = true;
-               }
-
-               ++var1;
-            } while(var1 < GameData.modelCount);
-
          }
       }
    }
@@ -1696,8 +1606,8 @@ public class mudclient extends GameConnection {
       } else {
          do {
             this.field_379.addButtonBackground(170, var3, 310, 30);
-            this.field_388[var2] = this.field_450[this.field_387[var2]];
-            this.field_383[var2] = this.field_379.addText(170, var3 - 7, var2 + 1 + ": " + this.field_450[this.field_387[var2]], 1, true);
+            this.field_388[var2] = this.recoveryQuestions[this.field_387[var2]];
+            this.field_383[var2] = this.field_379.addText(170, var3 - 7, var2 + 1 + ": " + this.recoveryQuestions[this.field_387[var2]], 1, true);
             this.field_384[var2] = this.field_379.method_299(170, var3 + 7, 310, 30, 1, 80, false, true);
             this.field_379.addButtonBackground(370, var3, 80, 30);
             this.field_379.addText(370, var3 - 7, "Different", 1, true);
@@ -1740,7 +1650,7 @@ public class mudclient extends GameConnection {
                   boolean var2 = false;
                   if(var8 != 0 || !var2) {
                      do {
-                        this.field_387[var1] = (this.field_387[var1] + 1) % this.field_450.length;
+                        this.field_387[var1] = (this.field_387[var1] + 1) % this.recoveryQuestions.length;
                         var2 = true;
                         var3 = 0;
                         if(var8 != 0 || var3 < 5) {
@@ -1755,8 +1665,8 @@ public class mudclient extends GameConnection {
                      } while(!var2);
                   }
 
-                  this.field_388[var1] = this.field_450[this.field_387[var1]];
-                  this.field_379.updateText(this.field_383[var1], var1 + 1 + ": " + this.field_450[this.field_387[var1]]);
+                  this.field_388[var1] = this.recoveryQuestions[this.field_387[var1]];
+                  this.field_379.updateText(this.field_383[var1], var1 + 1 + ": " + this.recoveryQuestions[this.field_387[var1]]);
                   this.field_379.updateText(this.field_384[var1], "");
                }
 
@@ -1850,7 +1760,7 @@ public class mudclient extends GameConnection {
             if(var8 != 0 || var6 < 5) {
                do {
                   this.field_387[var6] = var6;
-                  this.field_388[var6] = this.field_450[this.field_387[var6]];
+                  this.field_388[var6] = this.recoveryQuestions[this.field_387[var6]];
                   this.field_379.updateText(this.field_384[var6], "");
                   this.field_379.updateText(this.field_383[var6], var6 + 1 + ": " + this.field_388[var6]);
                   ++var6;
@@ -2577,11 +2487,11 @@ public class mudclient extends GameConnection {
                   this.username = this.panelLoginExistingUser.method_308(this.field_355);
                   this.username = Utility.method_453(this.username, 20);
                   if(this.username.trim().length() == 0) {
-                     this.method_43("You must enter your username to recover your password", "");
+                     this.showLoginResponse("You must enter your username to recover your password", "");
                      return;
                   }
 
-                  this.method_43(GameConnection.loginResponses[6], GameConnection.loginResponses[7]);
+                  this.showLoginResponse(GameConnection.loginResponses[6], GameConnection.loginResponses[7]);
 
                   try {
                      super.clientStream = new ClientStream(this.connect(super.address, super.port), this);
@@ -2596,7 +2506,7 @@ public class mudclient extends GameConnection {
                      var11 = super.clientStream.method_161(var11, GameConnection.opcodeEncryptionArray);
                      System.out.println("Getpq response: " + var11); // authentic System.out.println
                      if(var11 == 0) {
-                        this.method_43("Sorry, the recovery questions for this user have not been set", "");
+                        this.showLoginResponse("Sorry, the recovery questions for this user have not been set", "");
                         return;
                      }
 
@@ -2621,7 +2531,7 @@ public class mudclient extends GameConnection {
                      }
 
                      if(this.field_389) {
-                        this.method_43("Sorry, you have already attempted 1 recovery, try again later", "");
+                        this.showLoginResponse("Sorry, you have already attempted 1 recovery, try again later", "");
                         return;
                      }
 
@@ -2644,7 +2554,7 @@ public class mudclient extends GameConnection {
                      this.field_390.updateText(this.field_395, "");
                      return;
                   } catch (Exception var9) {
-                     this.method_43(GameConnection.loginResponses[12], GameConnection.loginResponses[13]);
+                     this.showLoginResponse(GameConnection.loginResponses[12], GameConnection.loginResponses[13]);
                      return;
                   }
                }
@@ -2654,16 +2564,16 @@ public class mudclient extends GameConnection {
                   userName = this.field_390.method_308(this.field_394);
                   password = this.field_390.method_308(this.field_395);
                   if(!userName.equalsIgnoreCase(password)) {
-                     this.method_43("@yel@The two new passwords entered are not the same as each other!", "");
+                     this.showLoginResponse("@yel@The two new passwords entered are not the same as each other!", "");
                      return;
                   }
 
                   if(userName.length() < 5) {
-                     this.method_43("@yel@Your new password must be at least 5 letters long", "");
+                     this.showLoginResponse("@yel@Your new password must be at least 5 letters long", "");
                      return;
                   }
 
-                  this.method_43(GameConnection.loginResponses[6], GameConnection.loginResponses[7]);
+                  this.showLoginResponse(GameConnection.loginResponses[6], GameConnection.loginResponses[7]);
 
                   try {
                      super.clientStream = new ClientStream(this.connect(super.address, super.port), this);
@@ -2700,22 +2610,22 @@ public class mudclient extends GameConnection {
                      System.out.println("Recover response: " + var14); // authentic System.out.println
                      if(var14 == 0) {
                         this.loginScreen = 2;
-                        this.method_43("Sorry, recovery failed. You may try again in 1 hour", "");
+                        this.showLoginResponse("Sorry, recovery failed. You may try again in 1 hour", "");
                         this.field_389 = true;
                         return;
                      }
 
                      if(var14 == 1) {
                         this.loginScreen = 2;
-                        this.method_43("Your pass has been reset. You may now use the new pass to login", "");
+                        this.showLoginResponse("Your pass has been reset. You may now use the new pass to login", "");
                         return;
                      }
 
                      this.loginScreen = 2;
-                     this.method_43("Recovery failed! Attempts exceeded?", "");
+                     this.showLoginResponse("Recovery failed! Attempts exceeded?", "");
                      return;
                   } catch (Exception var10) {
-                     this.method_43(GameConnection.loginResponses[12], GameConnection.loginResponses[13]);
+                     this.showLoginResponse(GameConnection.loginResponses[12], GameConnection.loginResponses[13]);
                   }
                }
 
@@ -2729,7 +2639,7 @@ public class mudclient extends GameConnection {
    }
 
    // $FF: renamed from: d (java.lang.String, java.lang.String) void
-   public void method_43(String var1, String var2) {
+   public void showLoginResponse(String var1, String var2) {
       if(this.loginScreen == 1) {
          this.panelLoginNewuser.updateText(this.field_346, var1 + " " + var2);
       }
@@ -5458,7 +5368,7 @@ public class mudclient extends GameConnection {
 
                   do {
                      this.field_387[updateSize] = updateSize;
-                     this.field_388[updateSize] = this.field_450[this.field_387[updateSize]];
+                     this.field_388[updateSize] = this.recoveryQuestions[this.field_387[updateSize]];
                      this.field_379.updateText(this.field_384[updateSize], "");
                      this.field_379.updateText(this.field_383[updateSize], updateSize + 1 + ": " + this.field_388[updateSize]);
                      ++updateSize;
@@ -12694,75 +12604,25 @@ public class mudclient extends GameConnection {
    }
 
    public Graphics getGraphics() {
-      return GameShell.field_7 != null? GameShell.field_7.getGraphics():(link.mainapp != null?link.mainapp.getGraphics():super.getGraphics());
+      return super.getGraphics();
    }
 
+   /*
    public Image createImage(int var1, int var2) {
-      return GameShell.field_7 != null? GameShell.field_7.createImage(var1, var2):(link.mainapp != null?link.mainapp.createImage(var1, var2):super.createImage(var1, var2));
-   }
-
-   public URL getCodeBase() {
-   		URL codebase = null;
-   		try {
-   			codebase = new URL("http://" + super.address);
-			} catch (Exception e) {
-   			e.printStackTrace();
-			}
-      return codebase;
-   		// Original Function:
-   		// return link.mainapp != null?link.mainapp.getCodeBase():super.getCodeBase();
-   }
-
-   public URL getDocumentBase() {
-      return link.mainapp != null?link.mainapp.getDocumentBase():super.getDocumentBase();
-   }
-
-   public String getParameter(String var1) {
-      return link.mainapp != null?link.mainapp.getParameter(var1):super.getParameter(var1);
-   }
+      return GameShell.gameFrame != null? GameShell.gameFrame.createImage(var1, var2):(link.mainapp != null?link.mainapp.createImage(var1, var2):super.createImage(var1, var2));
+   }*/
 
    // $FF: renamed from: a (java.lang.String, int) java.net.Socket
    public Socket connect(String address, int port) throws IOException {
-      Socket var3;
-      if(link.mainapp != null) {
-         var3 = link.opensocket(port);
-         if(var3 == null) {
-            throw new IOException();
-         } else {
-            return var3;
-         }
-      } else {
-         label18: {
-            if(this.method_8()) {
-               var3 = new Socket(InetAddress.getByName(this.getCodeBase().getHost()), port);
-               if(GameData.field_563 == 0) {
-                  break label18;
-               }
-            }
-
-            var3 = new Socket(InetAddress.getByName(address), port);
-         }
-
-         var3.setSoTimeout(30000);
-         var3.setTcpNoDelay(true);
-         return var3;
-      }
-   }
-
-   // $FF: renamed from: a (java.lang.Runnable) void
-   public void startThread(Runnable var1) {
-      if(link.mainapp != null) {
-         link.startthread(var1);
-      } else {
-         Thread var2 = new Thread(var1);
-         var2.setDaemon(true);
-         var2.start();
-      }
+      Socket socket = new Socket(InetAddress.getByName(address), port);
+      socket.setSoTimeout(30000);
+      socket.setTcpNoDelay(true);
+      return socket;
    }
 
    // $FF: renamed from: g (int) java.lang.String
    public String translateIpAddress(int var1) {
-      return link.mainapp != null?link.gethostname(Utility.translateIpAddress(var1)): Utility.translateIpAddress(var1);
+      return Utility.translateIpAddress(var1);
    }
 
    // $FF: renamed from: <init> () void
@@ -12972,7 +12832,7 @@ public class mudclient extends GameConnection {
       this.field_446 = new int[50];
       this.field_447 = new int[50];
       this.isSleeping = false;
-      this.field_450 = new String[]{"Where were you born?", "What was your first teachers name?", "What is your fathers middle name?", "Who was your first best friend?", "What is your favourite vacation spot?", "What is your mothers middle name?", "What was your first pets name?", "What was the name of your first school?", "What is your mothers maiden name?", "Who was your first boyfriend/girlfriend?", "What was the first computer game you purchased?", "Who is your favourite actor/actress?", "Who is your favourite author?", "Who is your favourite musician?", "Who is your favourite cartoon character?", "What is your favourite book?", "What is your favourite food?", "What is your favourite movie?"};
+      this.recoveryQuestions = new String[]{"Where were you born?", "What was your first teachers name?", "What is your fathers middle name?", "Who was your first best friend?", "What is your favourite vacation spot?", "What is your mothers middle name?", "What was your first pets name?", "What was the name of your first school?", "What is your mothers maiden name?", "Who was your first boyfriend/girlfriend?", "What was the first computer game you purchased?", "Who is your favourite actor/actress?", "Who is your favourite author?", "Who is your favourite musician?", "Who is your favourite cartoon character?", "What is your favourite book?", "What is your favourite food?", "What is your favourite movie?"};
       if(var1 != 0) {
          int var2 = Utility.field_1009;
          ++var2;

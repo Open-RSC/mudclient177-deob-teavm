@@ -1,3 +1,4 @@
+package mudclient;
 
 import java.io.IOException;
 import java.math.BigInteger;

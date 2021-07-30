@@ -1,3 +1,4 @@
+package mudclient;
 
 // $FF: renamed from: b
 public class GameData {

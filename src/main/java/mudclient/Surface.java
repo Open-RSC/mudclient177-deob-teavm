@@ -1,16 +1,7 @@
-
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.image.ColorModel;
-import java.awt.image.DirectColorModel;
-import java.awt.image.ImageConsumer;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
-import java.util.Hashtable;
+package mudclient;
 
 // $FF: renamed from: a.a.g
-public class Surface implements ImageProducer, ImageObserver {
+public class Surface {
 
    // $FF: renamed from: a int
    public int field_723;
@@ -22,14 +13,10 @@ public class Surface implements ImageProducer, ImageObserver {
    public int field_726;
    // $FF: renamed from: e int
    public int field_727;
-   // $FF: renamed from: f java.awt.image.ColorModel
-   ColorModel field_728;
    // $FF: renamed from: g int[]
    public int[] pixels;
-   // $FF: renamed from: h java.awt.image.ImageConsumer
-   ImageConsumer field_730;
    // $FF: renamed from: i java.awt.Component
-   private Component field_731;
+   private mudclient field_731;
    // $FF: renamed from: j java.awt.Image
    public Image field_732;
    // $FF: renamed from: k int[][]
@@ -88,17 +75,19 @@ public class Surface implements ImageProducer, ImageObserver {
    public static boolean field_759;
 
    // $FF: renamed from: <init> (int, int, int, java.awt.Component) void
-   public Surface(int var1, int var2, int var3, Component var4) {
+   public Surface(int width, int height, int var3, mudclient var4) {
       super();
       this.interlace = false;
       this.loggedIn = false;
       this.field_731 = var4;
-      this.field_744 = var2;
-      this.field_746 = var1;
-      this.field_726 = this.field_723 = var1;
-      this.field_727 = this.field_724 = var2;
-      this.field_725 = var1 * var2;
-      this.pixels = new int[var1 * var2];
+      this.field_744 = height;
+      this.field_746 = width;
+      this.field_726 = width;
+      this.field_723 = width;
+      this.field_727 = height;
+      this.field_724 = height;
+      this.field_725 = width * height;
+      this.pixels = new int[width * height];
       this.spritePixels = new int[var3][];
       this.field_742 = new boolean[var3];
       this.spriteColoursUsed = new byte[var3][];
@@ -109,8 +98,7 @@ public class Surface implements ImageProducer, ImageObserver {
       this.field_741 = new int[var3];
       this.field_738 = new int[var3];
       this.field_739 = new int[var3];
-      if(var1 > 1 && var2 > 1 && var4 != null) {
-         this.field_728 = new DirectColorModel(32, 16711680, '\uff00', 255);
+      if(width > 1 && height > 1 && var4 != null) {
          int var5 = this.field_723 * this.field_724;
          int var6 = 0;
          if(field_759 || var6 < var5) {
@@ -121,45 +109,18 @@ public class Surface implements ImageProducer, ImageObserver {
          }
 
          this.field_732 = var4.createImage(this);
-         this.method_219();
+         this.draw();
          var4.prepareImage(this.field_732, var4);
-         this.method_219();
+         this.draw();
          var4.prepareImage(this.field_732, var4);
-         this.method_219();
+         this.draw();
          var4.prepareImage(this.field_732, var4);
       }
 
-   }
-
-   public synchronized void addConsumer(ImageConsumer var1) {
-      this.field_730 = var1;
-      var1.setDimensions(this.field_723, this.field_724);
-      var1.setProperties((Hashtable)null);
-      var1.setColorModel(this.field_728);
-      var1.setHints(14);
-   }
-
-   public synchronized boolean isConsumer(ImageConsumer var1) {
-      return this.field_730 == var1;
-   }
-
-   public synchronized void removeConsumer(ImageConsumer var1) {
-      if(this.field_730 == var1) {
-         this.field_730 = null;
-      }
-
-   }
-
-   public void startProduction(ImageConsumer var1) {
-      this.addConsumer(var1);
-   }
-
-   public void requestTopDownLeftRightResend(ImageConsumer var1) {
-      System.out.println("TDLR"); // authentic System.out.println
    }
 
    // $FF: renamed from: a () void
-   public synchronized void method_219() {
+   public void draw() {
       if(this.field_730 != null) {
          this.field_730.setPixels(0, 0, this.field_723, this.field_724, this.field_728, this.pixels, 0, this.field_723);
          this.field_730.imageComplete(2);
@@ -200,7 +161,7 @@ public class Surface implements ImageProducer, ImageObserver {
 
    // $FF: renamed from: a (java.awt.Graphics, int, int) void
    public void draw(Graphics var1, int var2, int var3) {
-      this.method_219();
+      this.draw();
       var1.drawImage(this.field_732, var2, var3, this);
    }
 

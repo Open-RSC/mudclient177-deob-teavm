@@ -1,10 +1,7 @@
+package mudclient;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
 import java.io.EOFException;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 
 // $FF: renamed from: a.f
@@ -19,24 +16,13 @@ public class Utility {
 
 
    // $FF: renamed from: a (java.lang.String) java.io.InputStream
-   public static InputStream method_443(String var0) throws IOException {
-      Object var1;
-      if(field_1007 == null) {
-         var1 = new BufferedInputStream(new FileInputStream(var0));
-         if(Packet.field_597 == 0) {
-            return (InputStream)var1;
-         }
-      }
-
-      URL var2 = new URL(field_1007, var0);
-      var1 = var2.openStream();
-      return (InputStream)var1;
+   public static FileDownloadStream getDownloadStream(String fileName) throws IOException {
+      return new FileDownloadStream(fileName);
    }
 
    // $FF: renamed from: a (java.lang.String, byte[], int) void
    public static void readFully(String var0, byte[] var1, int var2) throws IOException {
-      InputStream var3 = method_443(var0);
-      DataInputStream var4 = new DataInputStream(var3);
+      FileDownloadStream var4 = getDownloadStream(var0);
 
       try {
          var4.readFully(var1, 0, var2);

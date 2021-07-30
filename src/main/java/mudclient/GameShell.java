@@ -1,24 +1,13 @@
+package mudclient;
 
-
-import java.applet.Applet;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Event;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.image.IndexColorModel;
-import java.awt.image.MemoryImageSource;
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.URL;
+
+import org.teavm.jso.canvas.ImageData;
 
 // $FF: renamed from: a.a.a
-public class GameShell extends Applet implements Runnable {
+public class GameShell {
    // inauthentic boolean to disable cache url loading in applet mode
    public static boolean disableCacheURLLoader = true;
 
@@ -26,28 +15,24 @@ public class GameShell extends Applet implements Runnable {
    private int width;
    // $FF: renamed from: b int
    private int height;
-   // $FF: renamed from: c java.lang.Thread
-   private Thread field_3;
    // $FF: renamed from: d int
    private int field_4;
    // $FF: renamed from: e int
    private int field_5;
    // $FF: renamed from: f long[]
    private long[] field_6;
-   // $FF: renamed from: g a.a.c
-   public static GameFrame field_7;
    // $FF: renamed from: h boolean
-   private boolean field_8;
+   private boolean applicationMode;
    // $FF: renamed from: i int
    private int field_9;
    // $FF: renamed from: j int
    private int field_10;
    // $FF: renamed from: k int
-   public int field_11;
+   public int offsetY;
    // $FF: renamed from: l int
    public int lastMouseAction;
    // $FF: renamed from: m int
-   public int field_13;
+   public int loadingStep;
    // $FF: renamed from: n java.lang.String
    public String field_14;
    // $FF: renamed from: o boolean
@@ -63,11 +48,11 @@ public class GameShell extends Applet implements Runnable {
    // $FF: renamed from: t java.awt.Font
    private Font field_20;
    // $FF: renamed from: u java.awt.Image
-   private Image jagexLogo;
+   private ImageData jagexLogo;
    // $FF: renamed from: v java.awt.Graphics
    private Graphics graphics;
    // $FF: renamed from: w java.lang.String
-   private static String field_23;
+   private static String characterMap;
    // $FF: renamed from: x boolean
    public boolean field_24;
    // $FF: renamed from: y boolean
@@ -76,10 +61,6 @@ public class GameShell extends Applet implements Runnable {
    public boolean field_26;
    // $FF: renamed from: A boolean
    public boolean field_27;
-   // $FF: renamed from: B boolean
-   public boolean field_28;
-   // $FF: renamed from: C boolean
-   public boolean field_29;
    // $FF: renamed from: D boolean
    public boolean field_30;
    // $FF: renamed from: E boolean
@@ -114,33 +95,31 @@ public class GameShell extends Applet implements Runnable {
    public void startGame() {}
 
    // $FF: renamed from: b () void
-   public synchronized void method_3() {}
+   public void method_3() {}
 
    // $FF: renamed from: c () void
    public void method_4() {}
 
    // $FF: renamed from: d () void
-   public synchronized void method_5() {}
+   public void method_5() {}
 
    // $FF: renamed from: e () void
    public void method_6() {}
 
    // $FF: renamed from: a (int, int, java.lang.String, boolean) void
-   public final void method_7(int var1, int var2, String var3, boolean var4) {
-      this.field_8 = true;
+   public final void startApplication(int width, int height, String var3, boolean var4) {
+      this.applicationMode = true;
       System.out.println("Started application"); // authentic System.out.println
-      this.width = var1;
-      this.height = var2;
-      field_7 = new GameFrame(this, var1, var2, var3, var4, false);
-      this.field_13 = 1;
-      this.field_3 = new Thread(this);
-      this.field_3.start();
-      this.field_3.setPriority(1);
+      this.width = width;
+      this.height = height;
+      this.loadingStep = 1;
+      this.start();
+      this.run();
    }
 
    // $FF: renamed from: f () boolean
-   public final boolean method_8() {
-      return this.field_8;
+   public final boolean isApplication() {
+      return this.applicationMode;
    }
 
    // $FF: renamed from: a (int) void
@@ -160,7 +139,7 @@ public class GameShell extends Applet implements Runnable {
       }
    }
 
-   public synchronized boolean keyDown(Event var1, int var2) {
+   public boolean keyDown(int var2) {
       boolean var5 = Surface.field_759;
       this.method_11(var2);
       this.field_37 = var2;
@@ -172,14 +151,6 @@ public class GameShell extends Applet implements Runnable {
 
       if(var2 == 1007) {
          this.field_27 = true;
-      }
-
-      if(var2 == 1004) {
-         this.field_28 = true;
-      }
-
-      if(var2 == 1005) {
-         this.field_29 = true;
       }
 
       if((char)var2 == 32) {
@@ -208,9 +179,9 @@ public class GameShell extends Applet implements Runnable {
 
       boolean var3 = false;
       int var4 = 0;
-      if(var5 || var4 < field_23.length()) {
+      if(var5 || var4 < characterMap.length()) {
          do {
-            if(var2 == field_23.charAt(var4)) {
+            if(var2 == characterMap.charAt(var4)) {
                var3 = true;
                if(!var5) {
                   break;
@@ -218,7 +189,7 @@ public class GameShell extends Applet implements Runnable {
             }
 
             ++var4;
-         } while(var4 < field_23.length());
+         } while(var4 < characterMap.length());
       }
 
       if(var3 && this.inputTextCurrent.length() < 20) {
@@ -248,7 +219,7 @@ public class GameShell extends Applet implements Runnable {
    // $FF: renamed from: b (int) void
    public void method_11(int var1) {}
 
-   public synchronized boolean keyUp(Event var1, int var2) {
+   public boolean keyUp(int var2) {
       this.field_37 = 0;
       if(var2 == 1006) {
          this.field_26 = false;
@@ -256,14 +227,6 @@ public class GameShell extends Applet implements Runnable {
 
       if(var2 == 1007) {
          this.field_27 = false;
-      }
-
-      if(var2 == 1004) {
-         this.field_28 = false;
-      }
-
-      if(var2 == 1005) {
-         this.field_29 = false;
       }
 
       if((char)var2 == 32) {
@@ -289,79 +252,58 @@ public class GameShell extends Applet implements Runnable {
       return true;
    }
 
-   public synchronized boolean mouseMove(Event var1, int var2, int var3) {
+   public boolean mouseMove(int var2, int var3) {
       this.mouseX = var2;
-      this.mouseY = var3 + this.field_11;
+      this.mouseY = var3 + this.offsetY;
       this.field_35 = 0;
       this.lastMouseAction = 0;
       return true;
    }
 
-   public synchronized boolean mouseUp(Event var1, int var2, int var3) {
+   public boolean mouseUp(int var2, int var3) {
       this.mouseX = var2;
-      this.mouseY = var3 + this.field_11;
+      this.mouseY = var3 + this.offsetY;
       this.field_35 = 0;
       return true;
    }
 
-   public synchronized boolean mouseDown(Event var1, int var2, int var3) {
-      label11: {
-         this.mouseX = var2;
-         this.mouseY = var3 + this.field_11;
-         if(var1.metaDown()) {
-            this.field_35 = 2;
-            if(!Surface.field_759) {
-               break label11;
-            }
+   public boolean mouseDown(int x, int y) {
+      this.mouseX = x;
+      this.mouseY = y + this.offsetY;
+      /*if(var1.metaDown()) {
+         this.field_35 = 2;
+         if(!Surface.field_759) {
+            break label11;
          }
+      }*/
 
-         this.field_35 = 1;
-      }
-
+      this.field_35 = 1;
       this.lastMouseButtonDown = this.field_35;
       this.lastMouseAction = 0;
-      this.method_12(this.field_35, var2, var3);
+      this.method_12(this.field_35, x, y);
       return true;
    }
 
    // $FF: renamed from: a (int, int, int) void
    public void method_12(int var1, int var2, int var3) {}
 
-   public synchronized boolean mouseDrag(Event var1, int var2, int var3) {
+   public boolean mouseDrag(int var2, int var3) {
       this.mouseX = var2;
-      this.mouseY = var3 + this.field_11;
-      if(var1.metaDown()) {
+      this.mouseY = var3 + this.offsetY;
+      /*if(var1.metaDown()) {
          this.field_35 = 2;
          if(!Surface.field_759) {
             return true;
          }
-      }
+      }*/
 
       this.field_35 = 1;
       return true;
    }
 
-   public final void init() {
-      this.field_8 = true;
-      System.out.println("Started applet"); // authentic System.out.println
-      this.width = 512;
-      this.height = 344;
-      this.field_13 = 1;
-      if (!disableCacheURLLoader)
-         Utility.field_1007 = this.getCodeBase();
-      this.startThread(this);
-   }
-
    public final void start() {
       if(this.field_9 >= 0) {
          this.field_9 = 0;
-      }
-
-   }
-
-   public final void stop() {
-      if(this.field_9 >= 0) {
-         this.field_9 = 4000 / this.field_4;
       }
 
    }
@@ -378,10 +320,6 @@ public class GameShell extends Applet implements Runnable {
       if(this.field_9 == -1) {
          System.out.println("5 seconds expired, forcing kill"); // authentic System.out.println
          this.method_13();
-         if(this.field_3 != null) {
-            this.field_3.stop();
-            this.field_3 = null;
-         }
       }
 
    }
@@ -398,11 +336,7 @@ public class GameShell extends Applet implements Runnable {
          ;
       }
 
-      if(field_7 != null) {
-         field_7.dispose();
-      }
-
-      if(!this.field_8) {
+      if(!this.applicationMode) {
          System.exit(0);
       }
 
@@ -410,13 +344,13 @@ public class GameShell extends Applet implements Runnable {
 
    public final void run() {
       boolean var11 = Surface.field_759;
-      if(this.field_13 == 1) {
-         this.field_13 = 2;
+      if(this.loadingStep == 1) {
+         this.loadingStep = 2;
          this.graphics = this.getGraphics();
          this.method_14();
          this.method_15(0, "Loading...");
          this.startGame();
-         this.field_13 = 0;
+         this.loadingStep = 0;
       }
 
       int var3 = 0;
@@ -436,15 +370,12 @@ public class GameShell extends Applet implements Runnable {
          if(this.field_9 == -1) {
             this.method_13();
          }
-
-         this.field_3 = null;
       } else {
          do {
             if(this.field_9 > 0) {
                --this.field_9;
                if(this.field_9 == 0) {
                   this.method_13();
-                  this.field_3 = null;
                   return;
                }
             }
@@ -532,8 +463,6 @@ public class GameShell extends Applet implements Runnable {
          if(this.field_9 == -1) {
             this.method_13();
          }
-
-         this.field_3 = null;
       }
    }
 
@@ -542,10 +471,10 @@ public class GameShell extends Applet implements Runnable {
    }
 
    public final void paint(Graphics var1) {
-      if(this.field_13 == 2 && this.jagexLogo != null) {
+      if(this.loadingStep == 2 && this.jagexLogo != null) {
          this.method_15(this.field_16, this.field_17);
       } else {
-         if(this.field_13 == 0) {
+         if(this.loadingStep == 0) {
             this.method_6();
          }
 
@@ -579,7 +508,7 @@ public class GameShell extends Applet implements Runnable {
          this.graphics.setColor(Color.black);
          this.graphics.fillRect(0, 0, this.width, this.height);
          if(!this.field_15) {
-            this.graphics.drawImage(this.jagexLogo, var3, var4, this);
+            this.graphics.drawImage(this.jagexLogo, var3, var4);
          }
 
          var3 += 2;
@@ -599,22 +528,22 @@ public class GameShell extends Applet implements Runnable {
          }
 
          label26: {
-            this.drawStringCentred(this.graphics, var2, this.field_18, var3 + 138, var4 + 10);
+            this.drawStringCentre(this.graphics, var2, this.field_18, var3 + 138, var4 + 10);
             if(!this.field_15) {
-               this.drawStringCentred(this.graphics, "Created by JAGeX - visit www.jagex.com", this.field_19, var3 + 138, var4 + 30);
-               this.drawStringCentred(this.graphics, "©2001-2002 Andrew Gower and Jagex Ltd", this.field_19, var3 + 138, var4 + 44);
+               this.drawStringCentre(this.graphics, "Created by JAGeX - visit www.jagex.com", this.field_19, var3 + 138, var4 + 30);
+               this.drawStringCentre(this.graphics, "©2001-2002 Andrew Gower and Jagex Ltd", this.field_19, var3 + 138, var4 + 44);
                if(!Surface.field_759) {
                   break label26;
                }
             }
 
             this.graphics.setColor(new Color(132, 132, 152));
-            this.drawStringCentred(this.graphics, "©2001-2002 Andrew Gower and Jagex Ltd", this.field_20, var3 + 138, this.height - 20);
+            this.drawStringCentre(this.graphics, "©2001-2002 Andrew Gower and Jagex Ltd", this.field_20, var3 + 138, this.height - 20);
          }
 
          if(this.field_14 != null) {
             this.graphics.setColor(Color.white);
-            this.drawStringCentred(this.graphics, this.field_14, this.field_19, var3 + 138, var4 - 120);
+            this.drawStringCentre(this.graphics, this.field_14, this.field_19, var3 + 138, var4 - 120);
             return;
          }
       } catch (Exception var5) {
@@ -646,35 +575,23 @@ public class GameShell extends Applet implements Runnable {
             this.graphics.setColor(new Color(255, 255, 255));
          }
 
-         this.drawStringCentred(this.graphics, var2, this.field_18, var3 + 138, var4 + 10);
+         this.drawStringCentre(this.graphics, var2, this.field_18, var3 + 138, var4 + 10);
       } catch (Exception var6) {
          ;
       }
    }
 
    // $FF: renamed from: a (java.awt.Graphics, java.lang.String, java.awt.Font, int, int) void
-   public void drawStringCentred(Graphics var1, String string, Font var3, int x, int y) {
-      Object var6;
-      label11: {
-         if(field_7 == null) {
-            var6 = this;
-            if(!Surface.field_759) {
-               break label11;
-            }
-         }
-
-         var6 = field_7;
-      }
-
-      FontMetrics var7 = ((Component)var6).getFontMetrics(var3);
-      var7.stringWidth(string);
-      var1.setFont(var3);
-      var1.drawString(string, x - var7.stringWidth(string) / 2, y + var7.getHeight() / 4);
+   public void drawStringCentre(Graphics graphics, String string, Font font, int x, int y) {
+      int stringWidth = this.graphics.measureTextWidth(string);
+      graphics.setFont(font);
+      graphics.drawString(string, x - stringWidth / 2, y + font.getSize() / 4);
    }
 
    // $FF: renamed from: a (byte[]) java.awt.Image
-   public Image parseTGA(byte[] tgaBuffer) {
-      boolean var14 = Surface.field_759;
+   public ImageData parseTGA(byte[] tgaBuffer) {
+      return this.graphics.getContext().createImageData(0, 0);
+      /*boolean var14 = Surface.field_759;
       int var2 = tgaBuffer[13] * 256 + tgaBuffer[12];
       int var3 = tgaBuffer[15] * 256 + tgaBuffer[14];
       byte[] var4 = new byte[256];
@@ -718,25 +635,24 @@ public class GameShell extends Applet implements Runnable {
          var15 = new MemoryImageSource(var2, var3, var8, var9, 0, var2);
          var13 = this.createImage(var15);
          return var13;
-      }
+      }*/
    }
 
    // $FF: renamed from: a (java.lang.String, java.lang.String, int) byte[]
-   public byte[] readDataFile(String var1, String var2, int var3) {
+   public byte[] readDataFile(String fileName, String friendlyName, int progress) {
       System.out.println("Using default load"); // authentic System.out.println
       int var4 = 0;
       int var5 = 0;
       byte[] var6 = null;
 
       try {
-         this.showLoadingProgress(var3, "Loading " + var2 + " - 0%");
-         InputStream var7 = Utility.method_443(var1);
-         DataInputStream var8 = new DataInputStream(var7);
+         this.showLoadingProgress(progress, "Loading " + friendlyName + " - 0%");
+         FileDownloadStream var8 = Utility.getDownloadStream(fileName);
          byte[] var9 = new byte[6];
          var8.readFully(var9, 0, 6);
          var4 = ((var9[0] & 255) << 16) + ((var9[1] & 255) << 8) + (var9[2] & 255);
          var5 = ((var9[3] & 255) << 16) + ((var9[4] & 255) << 8) + (var9[5] & 255);
-         this.showLoadingProgress(var3, "Loading " + var2 + " - 5%");
+         this.showLoadingProgress(progress, "Loading " + friendlyName + " - 5%");
          int var10 = 0;
          var6 = new byte[var5];
          if(Surface.field_759 || var10 < var5) {
@@ -748,7 +664,7 @@ public class GameShell extends Applet implements Runnable {
 
                var8.readFully(var6, var10, var11);
                var10 += var11;
-               this.showLoadingProgress(var3, "Loading " + var2 + " - " + (5 + var10 * 95 / var5) + "%");
+               this.showLoadingProgress(progress, "Loading " + friendlyName + " - " + (5 + var10 * 95 / var5) + "%");
             } while(var10 < var5);
          }
 
@@ -757,7 +673,7 @@ public class GameShell extends Applet implements Runnable {
          ;
       }
 
-      this.showLoadingProgress(var3, "Unpacking " + var2);
+      this.showLoadingProgress(progress, "Unpacking " + friendlyName);
       if(var5 != var4) {
          byte[] var13 = new byte[var4];
          BZLib.method_397(var13, var4, var6, var5, 0);
@@ -768,49 +684,15 @@ public class GameShell extends Applet implements Runnable {
    }
 
    public Graphics getGraphics() {
-      return field_7 != null?field_7.getGraphics():super.getGraphics();
-   }
-
-   public Image createImage(int var1, int var2) {
-      return field_7 != null?field_7.createImage(var1, var2):super.createImage(var1, var2);
-   }
-
-   public URL getCodeBase() {
-      return super.getCodeBase();
-   }
-
-   public URL getDocumentBase() {
-      return super.getDocumentBase();
-   }
-
-   public String getParameter(String var1) {
-      return super.getParameter(var1);
+      return this.graphics;
    }
 
    // $FF: renamed from: a (java.lang.String, int) java.net.Socket
    public Socket connect(String address, int port) throws IOException {
-      Socket sock;
-      label11: {
-         if(this.method_8()) {
-            sock = new Socket(InetAddress.getByName(this.getCodeBase().getHost()), port);
-            if(!Surface.field_759) {
-               break label11;
-            }
-         }
-
-         sock = new Socket(InetAddress.getByName(address), port);
-      }
-
-      sock.setSoTimeout(30000);
-      sock.setTcpNoDelay(true);
-      return sock;
-   }
-
-   // $FF: renamed from: a (java.lang.Runnable) void
-   public void startThread(Runnable var1) {
-      Thread var2 = new Thread(var1);
-      var2.setDaemon(true);
-      var2.start();
+      Socket socket = new Socket(InetAddress.getByName(address), port);
+      socket.setSoTimeout(30000);
+      socket.setTcpNoDelay(true);
+      return socket;
    }
 
    // $FF: renamed from: <init> () void
@@ -821,7 +703,7 @@ public class GameShell extends Applet implements Runnable {
       this.field_4 = 20;
       this.field_5 = 1000;
       this.field_6 = new long[10];
-      this.field_13 = 1;
+      this.loadingStep = 1;
       this.field_15 = false;
       this.field_17 = "Loading";
       this.field_18 = new Font("TimesRoman", 0, 15);
@@ -831,8 +713,6 @@ public class GameShell extends Applet implements Runnable {
       this.field_25 = false;
       this.field_26 = false;
       this.field_27 = false;
-      this.field_28 = false;
-      this.field_29 = false;
       this.field_30 = false;
       this.field_31 = false;
       this.field_32 = 1;
@@ -845,7 +725,6 @@ public class GameShell extends Applet implements Runnable {
 
    // $FF: renamed from: <clinit> () void
    static {
-      field_7 = null;
-      field_23 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!\"£$%^&*()-_=+[{]};:\'@#~,<.>/?\\| ";
+      characterMap = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!\"£$%^&*()-_=+[{]};:\'@#~,<.>/?\\| ";
    }
 }

@@ -1,4 +1,4 @@
-
+package mudclient;
 
 // $FF: renamed from: a.c
 class BZState {

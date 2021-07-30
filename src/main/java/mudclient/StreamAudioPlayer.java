@@ -1,3 +1,4 @@
+package mudclient;
 
 import java.io.InputStream;
 

@@ -1,4 +1,4 @@
-
+package mudclient;
 
 // $FF: renamed from: a.a.j
 public class Scene {

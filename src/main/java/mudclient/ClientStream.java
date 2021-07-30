@@ -1,4 +1,4 @@
-
+package mudclient;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,7 +6,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 // $FF: renamed from: a.a.k
-public class ClientStream extends Packet implements Runnable {
+public class ClientStream extends Packet {
 
    // $FF: renamed from: I java.io.InputStream
    private InputStream instream;
@@ -35,7 +35,6 @@ public class ClientStream extends Packet implements Runnable {
       this.instream = var1.getInputStream();
       this.outstream = var1.getOutputStream();
       this.field_605 = false;
-      var2.startThread(this);
    }
 
    // $FF: renamed from: a () void

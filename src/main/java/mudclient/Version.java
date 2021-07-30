@@ -1,3 +1,4 @@
+package mudclient;
 // $FF: renamed from: e
 public class Version {
    // $FF: renamed from: b int

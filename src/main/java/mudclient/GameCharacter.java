@@ -1,3 +1,4 @@
+package mudclient;
 
 // $FF: renamed from: c
 public class GameCharacter {

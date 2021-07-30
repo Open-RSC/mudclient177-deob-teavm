@@ -1,8 +1,5 @@
+package mudclient;
 
-
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
 import java.io.IOException;
 import java.math.BigInteger;
 
@@ -76,7 +73,7 @@ public class GameConnection extends GameShell {
    public void login(String username, String password, boolean reconnecting) {
       boolean var8 = Surface.field_759;
       if(this.loginCooldown > 0) {
-         this.method_43(loginResponses[6], loginResponses[7]);
+         this.showLoginResponse(loginResponses[6], loginResponses[7]);
 
          try {
             Thread.sleep(2000L);
@@ -84,7 +81,7 @@ public class GameConnection extends GameShell {
             ;
          }
 
-         this.method_43(loginResponses[8], loginResponses[9]);
+         this.showLoginResponse(loginResponses[8], loginResponses[9]);
       } else {
          try {
             this.username_ = username;
@@ -92,7 +89,7 @@ public class GameConnection extends GameShell {
             this.password_ = password;
             password = Utility.method_453(password, 20);
             if(username.trim().length() == 0) {
-               this.method_43(loginResponses[0], loginResponses[1]);
+               this.showLoginResponse(loginResponses[0], loginResponses[1]);
             } else {
                label124: {
                   if(reconnecting) {
@@ -102,7 +99,7 @@ public class GameConnection extends GameShell {
                      }
                   }
 
-                  this.method_43(loginResponses[6], loginResponses[7]);
+                  this.showLoginResponse(loginResponses[6], loginResponses[7]);
                }
 
             	 this.clientStream = new ClientStream(this.connect(this.address, this.port), this);
@@ -111,19 +108,6 @@ public class GameConnection extends GameShell {
                this.sessionId = sessionId;
                System.out.println("Session id: " + sessionId); // authentic System.out.println
                int limit30 = 0;
-
-               try {
-                  if(this.method_8()) {
-                     String referId = this.getParameter("referid");
-                     limit30 = Integer.parseInt(referId);
-                     String limit30Read = this.getParameter("limit30");
-                     if(limit30Read.equals("1")) {
-                        limit30 += 50;
-                     }
-                  }
-               } catch (Exception var11) {
-                  ;
-               }
 
                label118: {
                   if(reconnecting) {
@@ -163,63 +147,63 @@ public class GameConnection extends GameShell {
                } else if(loginResponse == 3) {
 								 // "Invalid username or password.";
 								 // "Try again, or create a new account";
-								 this.method_43(loginResponses[10], loginResponses[11]);
+								 this.showLoginResponse(loginResponses[10], loginResponses[11]);
 
                } else if(loginResponse == 4) {
 								 // "That username is already in use.";
 								 // "Wait 60 seconds then retry";
-								 this.method_43(loginResponses[4], loginResponses[5]);
+								 this.showLoginResponse(loginResponses[4], loginResponses[5]);
 
                } else if(loginResponse == 5) {
 								 // "The client has been updated.";
 								 // "Please reload this page";
-								 this.method_43(loginResponses[16], loginResponses[17]);
+								 this.showLoginResponse(loginResponses[16], loginResponses[17]);
 
                } else if(loginResponse == 6) {
 								 // "You may only use 1 character at once.";
 								 // "Your ip-address is already in use";
-								 this.method_43(loginResponses[18], loginResponses[19]);
+								 this.showLoginResponse(loginResponses[18], loginResponses[19]);
 
                } else if(loginResponse == 7) {
 								 // "Login attempts exceeded!";
 								 // "Please try again in 5 minutes";
-								 this.method_43(loginResponses[20], loginResponses[21]);
+								 this.showLoginResponse(loginResponses[20], loginResponses[21]);
 
                } else if(loginResponse == 11) {
 								 // "Account has been temporarily disabled";
 								 // "check your message inbox for details";
-								 this.method_43(loginResponses[22], loginResponses[23]);
+								 this.showLoginResponse(loginResponses[22], loginResponses[23]);
 
                } else if(loginResponse == 12) {
 								 // "Account has been permanently disabled";
 								 // "check your message inbox for details";
-								 this.method_43(loginResponses[24], loginResponses[25]);
+								 this.showLoginResponse(loginResponses[24], loginResponses[25]);
 
                } else if(loginResponse == 13) {
                	 // "Username already taken.";
 								 // "Please choose another username";
-								 this.method_43(loginResponses[14], loginResponses[15]);
+								 this.showLoginResponse(loginResponses[14], loginResponses[15]);
 
                } else if(loginResponse == 14) {
 								  // "Sorry! The server is currently full.";
 								  // "Please try again later";
-                  this.method_43(loginResponses[8], loginResponses[9]);
+                  this.showLoginResponse(loginResponses[8], loginResponses[9]);
                   this.loginCooldown = 1500;
 
                } else if(loginResponse == 15) {
 								 // "You need a members account";
 								 // "to login to this server";
-								 this.method_43(loginResponses[26], loginResponses[27]);
+								 this.showLoginResponse(loginResponses[26], loginResponses[27]);
 
                } else if(loginResponse == 16) {
                	 // "Please login to a members server";
 								 // "to access member-only features";
-								 this.method_43(loginResponses[28], loginResponses[29]);
+								 this.showLoginResponse(loginResponses[28], loginResponses[29]);
 
                } else {
 								 // "Sorry! Unable to connect to server.";
 								 // "Check your internet settings";
-								 this.method_43(loginResponses[12], loginResponses[13]);
+								 this.showLoginResponse(loginResponses[12], loginResponses[13]);
                }
             }
          } catch (Exception ex) {
@@ -246,7 +230,7 @@ public class GameConnection extends GameShell {
 
 					 // "Sorry! Unable to connect to server.";
 					 // "Check your internet settings";
-            this.method_43(loginResponses[12], loginResponses[13]);
+            this.showLoginResponse(loginResponses[12], loginResponses[13]);
          }
       }
    }
@@ -284,15 +268,15 @@ public class GameConnection extends GameShell {
       var3.fillRect(var5 / 2 - 140, var6 / 2 - 25, 280, 50);
       var3.setColor(Color.white);
       var3.drawRect(var5 / 2 - 140, var6 / 2 - 25, 280, 50);
-      this.drawStringCentred(var3, var1, var4, var5 / 2, var6 / 2 - 10);
-      this.drawStringCentred(var3, var2, var4, var5 / 2, var6 / 2 + 10);
+      this.drawStringCentre(var3, var1, var4, var5 / 2, var6 / 2 - 10);
+      this.drawStringCentre(var3, var2, var4, var5 / 2, var6 / 2 + 10);
    }
 
    // $FF: renamed from: b (java.lang.String, java.lang.String) void
    public void registerAccount(String username, String password) {
       if(this.loginCooldown > 0) {
-				// Please wait... Connecting to server
-         this.method_43(loginResponses[6], loginResponses[7]);
+			   // Please wait... Connecting to server
+         this.showLoginResponse(loginResponses[6], loginResponses[7]);
 
          try {
             Thread.sleep(2000L);
@@ -300,33 +284,19 @@ public class GameConnection extends GameShell {
             ;
          }
 
-				// "Sorry! The server is currently full." "Please try again later";
-				this.method_43(loginResponses[8], loginResponses[9]);
+			   // "Sorry! The server is currently full." "Please try again later";
+			this.showLoginResponse(loginResponses[8], loginResponses[9]);
       } else {
          try {
             username = Utility.method_453(username, 20);
             password = Utility.method_453(password, 20);
 					 // Please wait... Connecting to server
-            this.method_43(loginResponses[6], loginResponses[7]);
+            this.showLoginResponse(loginResponses[6], loginResponses[7]);
             this.clientStream = new ClientStream(this.connect(this.address, this.port), this);
             int sessionId = this.clientStream.readInt();
             this.sessionId = sessionId;
             System.out.println("Session id: " + sessionId); // authentic System.out.println
             int referId = 0;
-
-            try {
-               if(this.method_8()) {
-                  String var5 = this.getParameter("referid");
-                  referId = Integer.parseInt(var5);
-                  String var6 = this.getParameter("limit30");
-                  if(var6.equals("1")) {
-                     referId += 50;
-                  }
-               }
-            } catch (Exception var8) {
-               ;
-            }
-
             this.clientStream.newPacket(2, 129);
             this.clientStream.putShort(clientVersion);
             this.clientStream.putLong(Utility.encodeUsername(username));
@@ -341,74 +311,73 @@ public class GameConnection extends GameShell {
             System.out.println("Newplayer response: " + newPlayerResponse); // authentic System.out.println
             if(newPlayerResponse == 2) {
                this.newPlayerRegistrationLogin(); // successful response
-
             } else if(newPlayerResponse == 3) {
 							// "Username already taken.";
 							// "Please choose another username";
-							this.method_43(loginResponses[14], loginResponses[15]);
+							this.showLoginResponse(loginResponses[14], loginResponses[15]);
 
             } else if(newPlayerResponse == 4) {
 							// "That username is already in use.";
 							// "Wait 60 seconds then retry";
-							this.method_43(loginResponses[4], loginResponses[5]);
+							this.showLoginResponse(loginResponses[4], loginResponses[5]);
 
             } else if(newPlayerResponse == 5) {
 							// "The client has been updated.";
 							// "Please reload this page";
-							this.method_43(loginResponses[16], loginResponses[17]);
+							this.showLoginResponse(loginResponses[16], loginResponses[17]);
 
             } else if(newPlayerResponse == 6) {
 							// "You may only use 1 character at once.";
 							// "Your ip-address is already in use";
-							this.method_43(loginResponses[18], loginResponses[19]);
+							this.showLoginResponse(loginResponses[18], loginResponses[19]);
 
             } else if(newPlayerResponse == 7) {
 							// "Login attempts exceeded!";
 							// "Please try again in 5 minutes";
-               this.method_43(loginResponses[20], loginResponses[21]);
+               this.showLoginResponse(loginResponses[20], loginResponses[21]);
 
             } else if(newPlayerResponse == 11) {
 							// "Account has been temporarily disabled";
 							// "check your message inbox for details";
-							this.method_43(loginResponses[22], loginResponses[23]);
+							this.showLoginResponse(loginResponses[22], loginResponses[23]);
 
             } else if(newPlayerResponse == 12) {
 							// "Account has been permanently disabled";
 							// "check your message inbox for details";
-							this.method_43(loginResponses[24], loginResponses[25]);
+							this.showLoginResponse(loginResponses[24], loginResponses[25]);
 
             } else if(newPlayerResponse == 13) {
             	// duplicate of response 3, maybe used for disallowed usernames like "Mod xxx"
             	// "Username already taken.";
 							// "Please choose another username";
-							this.method_43(loginResponses[14], loginResponses[15]);
+							this.showLoginResponse(loginResponses[14], loginResponses[15]);
 
             } else if(newPlayerResponse == 14) {
 							 // "Sorry! The server is currently full.";
 							 // "Please try again later";
-               this.method_43(loginResponses[8], loginResponses[9]);
+               this.showLoginResponse(loginResponses[8], loginResponses[9]);
                this.loginCooldown = 1500;
 
             } else if(newPlayerResponse == 15) {
 							// "You need a members account";
 							// "to login to this server";
-							this.method_43(loginResponses[26], loginResponses[27]);
+							this.showLoginResponse(loginResponses[26], loginResponses[27]);
 
             } else if(newPlayerResponse == 16) {
 							 // "Please login to a members server";
 							 // "to access member-only features";
-               this.method_43(loginResponses[28], loginResponses[29]);
+               this.showLoginResponse(loginResponses[28], loginResponses[29]);
 
             } else {
             	 // "Sorry! Unable to connect to server.";
 							 // "Check your internet settings";
-               this.method_43(loginResponses[12], loginResponses[13]);
+               this.showLoginResponse(loginResponses[12], loginResponses[13]);
             }
          } catch (Exception ex) {
             System.out.println(String.valueOf(ex)); // authentic System.out.println
 						// "Sorry! Unable to connect to server.";
 						// "Check your internet settings";
-            this.method_43(loginResponses[12], loginResponses[13]);
+            this.showLoginResponse(loginResponses[12], loginResponses[13]);
          }
       }
    }
@@ -707,7 +676,7 @@ public class GameConnection extends GameShell {
    }
 
    // $FF: renamed from: d (java.lang.String, java.lang.String) void
-   public void method_43(String var1, String var2) {}
+   public void showLoginResponse(String var1, String var2) {}
 
    // $FF: renamed from: o () void
    public void method_44() {}
