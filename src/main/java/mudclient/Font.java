@@ -14,7 +14,7 @@ public class Font {
     }                                                                       
                                                                             
     public String toCanvasFont() {                                                        
-        return this.getType() + " " + this.size + "px" + this.name; 
+        return this.getType() + " " + this.size + "px " + this.name; 
     }                                                                       
                                                                             
     public String getType() {                                                             

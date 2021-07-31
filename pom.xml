@@ -29,14 +29,6 @@
       <version>${teavm.version}</version>
       <scope>provided</scope>
     </dependency>
-
-    <!-- Servlet 3.1 specification -->
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
-      <version>3.1.0</version>
-      <scope>provided</scope>
-    </dependency>
   </dependencies>
 
   <build>
@@ -81,7 +73,7 @@
               <targetDirectory>${project.build.directory}/generated/js/teavm</targetDirectory>
 
               <!-- Main class, containing static void main(String[]) -->
-              <mainClass>mudclient.Client</mainClass>
+              <mainClass>mudclient.mudclient</mainClass>
 
               <!-- Whether TeaVM should produce minified JavaScript. Can reduce JavaScript file size more than
                    two times -->

@@ -1,8 +1,6 @@
 package mudclient;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.Socket;
 
 import org.teavm.jso.canvas.ImageData;
 import org.teavm.jso.dom.html.HTMLCanvasElement;
@@ -44,11 +42,11 @@ public class GameShell {
    // $FF: renamed from: q java.lang.String
    private String field_17;
    // $FF: renamed from: r java.awt.Font
-   private Font field_18;
+   private Font timesRoman;
    // $FF: renamed from: s java.awt.Font
-   private Font field_19;
+   private Font helveticaBold;
    // $FF: renamed from: t java.awt.Font
-   private Font field_20;
+   private Font helvetica;
    // $FF: renamed from: u java.awt.Image
    private ImageData jagexLogo;
    // $FF: renamed from: v java.awt.Graphics
@@ -313,7 +311,7 @@ public class GameShell {
       }
 
       if(!this.applicationMode) {
-         System.exit(0);
+         //System.exit(0);
       }
 
    }
@@ -504,22 +502,22 @@ public class GameShell {
          }
 
          label26: {
-            this.drawStringCentre(this.graphics, var2, this.field_18, var3 + 138, var4 + 10);
+            this.drawStringCentre(this.graphics, var2, this.timesRoman, var3 + 138, var4 + 10);
             if(!this.field_15) {
-               this.drawStringCentre(this.graphics, "Created by JAGeX - visit www.jagex.com", this.field_19, var3 + 138, var4 + 30);
-               this.drawStringCentre(this.graphics, "©2001-2002 Andrew Gower and Jagex Ltd", this.field_19, var3 + 138, var4 + 44);
+               this.drawStringCentre(this.graphics, "Created by JAGeX - visit www.jagex.com", this.helveticaBold, var3 + 138, var4 + 30);
+               this.drawStringCentre(this.graphics, "©2001-2002 Andrew Gower and Jagex Ltd", this.helveticaBold, var3 + 138, var4 + 44);
                if(!Surface.field_759) {
                   break label26;
                }
             }
 
             this.graphics.setColor(new Color(132, 132, 152));
-            this.drawStringCentre(this.graphics, "©2001-2002 Andrew Gower and Jagex Ltd", this.field_20, var3 + 138, this.height - 20);
+            this.drawStringCentre(this.graphics, "©2001-2002 Andrew Gower and Jagex Ltd", this.helvetica, var3 + 138, this.height - 20);
          }
 
          if(this.field_14 != null) {
             this.graphics.setColor(Color.white);
-            this.drawStringCentre(this.graphics, this.field_14, this.field_19, var3 + 138, var4 - 120);
+            this.drawStringCentre(this.graphics, this.field_14, this.helveticaBold, var3 + 138, var4 - 120);
             return;
          }
       } catch (Exception var5) {
@@ -551,7 +549,7 @@ public class GameShell {
             this.graphics.setColor(new Color(255, 255, 255));
          }
 
-         this.drawStringCentre(this.graphics, var2, this.field_18, var3 + 138, var4 + 10);
+         this.drawStringCentre(this.graphics, var2, this.timesRoman, var3 + 138, var4 + 10);
       } catch (Exception var6) {
          ;
       }
@@ -559,14 +557,14 @@ public class GameShell {
 
    // $FF: renamed from: a (java.awt.Graphics, java.lang.String, java.awt.Font, int, int) void
    public void drawStringCentre(Graphics graphics, String string, Font font, int x, int y) {
-      int stringWidth = this.graphics.measureTextWidth(string);
       graphics.setFont(font);
+      int stringWidth = this.graphics.measureTextWidth(string);
       graphics.drawString(string, x - stringWidth / 2, y + font.getSize() / 4);
    }
 
    // $FF: renamed from: a (byte[]) java.awt.Image
    public ImageData parseTGA(byte[] tgaBuffer) {
-      return this.graphics.getContext().createImageData(0, 0);
+      return this.graphics.getContext().createImageData(1, 1);
       /*boolean var14 = Surface.field_759;
       int var2 = tgaBuffer[13] * 256 + tgaBuffer[12];
       int var3 = tgaBuffer[15] * 256 + tgaBuffer[14];
@@ -665,9 +663,9 @@ public class GameShell {
 
    // $FF: renamed from: a (java.lang.String, int) java.net.Socket
    public Socket connect(String address, int port) throws IOException {
-      Socket socket = new Socket(InetAddress.getByName(address), port);
-      socket.setSoTimeout(30000);
-      socket.setTcpNoDelay(true);
+      Socket socket = new Socket(address, port);
+      //socket.setSoTimeout(30000);
+      //socket.setTcpNoDelay(true);
       return socket;
    }
 
@@ -682,9 +680,9 @@ public class GameShell {
       this.loadingStep = 1;
       this.field_15 = false;
       this.field_17 = "Loading";
-      this.field_18 = new Font("TimesRoman", 0, 15);
-      this.field_19 = new Font("Helvetica", 1, 13);
-      this.field_20 = new Font("Helvetica", 0, 12);
+      this.timesRoman = new Font("Times New Roman", 0, 15);
+      this.helveticaBold = new Font("Helvetica", 1, 13);
+      this.helvetica = new Font("Helvetica", 0, 12);
       this.keyLeftDown = false;
       this.keyRightDown = false;
       this.keySpaceDown = false;

@@ -1,13 +1,9 @@
 package mudclient;
 
-import java.net.Socket;
-
 public class link {
 
    public static int uid;
    static int socketport;
-   // $FF: renamed from: s java.net.Socket
-   static Socket field_0;
    static Runnable runme;
    static String iplookup;
    static String host;
@@ -37,27 +33,6 @@ public class link {
 
          return null;
       }
-   }
-
-   public static final Socket opensocket(int var0) {
-      socketport = var0;
-      if(GameData.field_563 != 0) {
-         try {
-            Thread.sleep(100L);
-         } catch (Exception var2) {
-            ;
-         }
-      }
-
-      while(socketport != 0) {
-         try {
-            Thread.sleep(100L);
-         } catch (Exception var1) {
-            ;
-         }
-      }
-
-      return field_0;
    }
 
    public static final void startthread(Runnable var0) {

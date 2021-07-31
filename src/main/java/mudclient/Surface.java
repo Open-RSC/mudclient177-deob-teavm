@@ -148,9 +148,10 @@ public class Surface {
          this.rgbPixels.set(i, (pixel >> 16) & 255);                     
          this.rgbPixels.set(i + 1, (pixel >> 8) & 255);                  
          this.rgbPixels.set(i + 2, pixel & 255);                         
-         this.rgbPixels.set(i + 3, 255);                                 
+         this.rgbPixels.set(i + 3, 255);
       }
-
+      
+      this.imageData.setData(this.rgbPixels);
       graphics.drawImage(this.imageData, x, y);
    }
 

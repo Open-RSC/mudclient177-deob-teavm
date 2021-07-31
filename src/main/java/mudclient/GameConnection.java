@@ -102,7 +102,7 @@ public class GameConnection extends GameShell {
                   this.showLoginResponse(loginResponses[6], loginResponses[7]);
                }
 
-            	 this.clientStream = new ClientStream(this.connect(this.address, this.port), this);
+            	this.clientStream = new ClientStream(this.connect(this.address, this.port), this);
                this.clientStream.field_591 = maxReadTries;
                int sessionId = this.clientStream.readInt();
                this.sessionId = sessionId;

@@ -2,8 +2,6 @@ package mudclient;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.net.InetAddress;
-import java.net.Socket;
 
 public class mudclient extends GameConnection {
    // inauthentic boolean controlling if applet will launch
@@ -12607,9 +12605,9 @@ public class mudclient extends GameConnection {
 
    // $FF: renamed from: a (java.lang.String, int) java.net.Socket
    public Socket connect(String address, int port) throws IOException {
-      Socket socket = new Socket(InetAddress.getByName(address), port);
-      socket.setSoTimeout(30000);
-      socket.setTcpNoDelay(true);
+      Socket socket = new Socket(address, port);
+      //socket.setSoTimeout(30000);
+      //socket.setTcpNoDelay(true);
       return socket;
    }
 

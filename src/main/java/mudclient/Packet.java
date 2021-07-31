@@ -216,9 +216,10 @@ public class Packet {
    }
 
    // $FF: renamed from: a (java.lang.String) void
-   public void putUnterminatedString(String var1) {
-      var1.getBytes(0, var1.length(), this.outgoingData, this.outgoingOffsetTotal);
-      this.outgoingOffsetTotal += var1.length();
+   public void putUnterminatedString(String string) {
+      //var1.getBytes(0, var1.length(), this.outgoingData, this.outgoingOffsetTotal);
+      System.arraycopy(string.getBytes(), 0, this.outgoingData, this.outgoingOffsetTotal, string.length());
+      this.outgoingOffsetTotal += string.length();
    }
 
    // $FF: renamed from: b (byte[], int, int) void
