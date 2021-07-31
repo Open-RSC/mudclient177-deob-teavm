@@ -5,7 +5,12 @@ import java.io.IOException;
 import org.teavm.jso.canvas.ImageData;
 import org.teavm.jso.dom.html.HTMLCanvasElement;
 import org.teavm.jso.dom.html.HTMLDocument;
+import org.teavm.jso.dom.html.TextRectangle;
 import org.teavm.jso.typedarrays.Uint8ClampedArray;
+import org.teavm.jso.dom.events.EventListener;
+import org.teavm.jso.dom.events.KeyboardEvent;
+import org.teavm.jso.dom.events.MouseEvent;
+
 
 // $FF: renamed from: a.a.a
 public class GameShell {
@@ -67,7 +72,7 @@ public class GameShell {
    // $FF: renamed from: H int
    public int mouseY;
    // $FF: renamed from: I int
-   public int field_35;
+   public int mouseButtonDown;
    // $FF: renamed from: J int
    public int lastMouseButtonDown;
    // $FF: renamed from: K int
@@ -103,17 +108,69 @@ public class GameShell {
    public void method_6() {}
 
    // $FF: renamed from: a (int, int, java.lang.String, boolean) void
-   public final void startApplication(int width, int height, String var3, boolean var4) {
+   public final void startApplication(int width, int height, String title, boolean var4) {
       this.applicationMode = true;
       System.out.println("Started application"); // authentic System.out.println
       this.width = width;
       this.height = height;
       this.loadingStep = 1;
+
+      HTMLDocument.current().setTitle(title);
       
       this.canvas = (HTMLCanvasElement) HTMLDocument.current().createElement("canvas");
       this.canvas.setAttribute("tabindex", "-1");
       this.canvas.setWidth(width);
       this.canvas.setHeight(height);
+
+      this.canvas.addEventListener("mousedown", new EventListener<MouseEvent>(){
+         public void handleEvent(MouseEvent event) {                         
+             setMousePosition(event);                                        
+             mouseDown(event.getButton() == 2 ? 2 : 1);                   
+         }                                                                   
+     });                                                                     
+                                                                             
+     this.canvas.addEventListener("mouseup", new EventListener<MouseEvent>(){
+         public void handleEvent(MouseEvent event) {                         
+             setMousePosition(event);                                        
+             mouseUp();                                                
+         }                                                                   
+     });                                                                     
+                                                                             
+     this.canvas.addEventListener("mousemove", new EventListener<MouseEvent>(){
+         public void handleEvent(MouseEvent event) {                         
+             setMousePosition(event);                                        
+             mouseMove();                                                   
+         }                                                                   
+     });                                                                     
+                                                                             
+     this.canvas.addEventListener("contextmenu", new EventListener<MouseEvent>(){
+         public void handleEvent(MouseEvent event) {                         
+             event.preventDefault();                                         
+         }                                                                   
+     });
+
+      this.canvas.addEventListener("keydown", new EventListener<KeyboardEvent>(){
+         public void handleEvent(KeyboardEvent event) {                      
+            int code = event.getKeyCode();                                  
+                                                                           
+            char charCode =                                                 
+               event.getKey().length() == 1 ? event.getKey().charAt(0) : 65535;
+                                                                           
+            if (code == 8 || code == 13 || code == 10 || code == 9) {       
+               charCode = (char) code;                                     
+            }                                                               
+                                                                           
+            keyDown(charCode);
+         }                                                                   
+      });                                                                     
+                                                                           
+      this.canvas.addEventListener("keyup", new EventListener<KeyboardEvent>(){
+         public void handleEvent(KeyboardEvent event) {                      
+            int code = event.getKeyCode();
+            keyUp(code);
+         }
+      });                                                                     
+  
 
       this.graphics = new Graphics(this.canvas);
 
@@ -227,52 +284,40 @@ public class GameShell {
       return true;
    }
 
-   public boolean mouseMove(int var2, int var3) {
-      this.mouseX = var2;
-      this.mouseY = var3 + this.offsetY;
-      this.field_35 = 0;
+   private void setMousePosition(MouseEvent event) {                                      
+      TextRectangle boundingRect = canvas.getBoundingClientRect();            
+      double scaleX = canvas.getWidth() / boundingRect.getWidth();            
+      double scaleY = canvas.getHeight() / boundingRect.getHeight();          
+                                                                              
+      this.mouseX = (int) ((event.getClientX() - boundingRect.getLeft()) * scaleX);
+      this.mouseY = (int) ((event.getClientY() - boundingRect.getTop()) * scaleY);
+      this.mouseY += this.offsetY;
+   }
+
+   public boolean mouseMove() {
+      //this.mouseButtonDown = 0; javascript doesn't have a separate drag event
       this.lastMouseAction = 0;
       return true;
    }
 
-   public boolean mouseUp(int var2, int var3) {
-      this.mouseX = var2;
-      this.mouseY = var3 + this.offsetY;
-      this.field_35 = 0;
+   public boolean mouseUp() {
+      this.mouseButtonDown = 0;
       return true;
    }
 
-   public boolean mouseDown(int x, int y) {
-      this.mouseX = x;
-      this.mouseY = y + this.offsetY;
-      /*if(var1.metaDown()) {
-         this.field_35 = 2;
-         if(!Surface.field_759) {
-            break label11;
-         }
-      }*/
-
-      this.field_35 = 1;
-      this.lastMouseButtonDown = this.field_35;
+   public boolean mouseDown(int button) {
+      this.mouseButtonDown = button;
+      this.lastMouseButtonDown = this.mouseButtonDown;
       this.lastMouseAction = 0;
-      this.method_12(this.field_35, x, y);
+      this.method_12(this.mouseButtonDown, this.mouseX, this.mouseY - this.offsetY);
       return true;
    }
 
    // $FF: renamed from: a (int, int, int) void
    public void method_12(int var1, int var2, int var3) {}
 
-   public boolean mouseDrag(int var2, int var3) {
-      this.mouseX = var2;
-      this.mouseY = var3 + this.offsetY;
-      /*if(var1.metaDown()) {
-         this.field_35 = 2;
-         if(!Surface.field_759) {
-            return true;
-         }
-      }*/
-
-      this.field_35 = 1;
+   public boolean mouseDrag() {
+      this.mouseButtonDown = 1;
       return true;
    }
 
@@ -572,41 +617,41 @@ public class GameShell {
       byte[] redIndex = new byte[256];
       byte[] greenIndex = new byte[256];
       byte[] blueIndex = new byte[256];
-      int var7 = 0;
-      if(var14 || var7 < 256) {
+      int rgbIdx = 0;
+      if(var14 || rgbIdx < 256) {
          do {
-            redIndex[var7] = tgaBuffer[20 + var7 * 3];
-            greenIndex[var7] = tgaBuffer[19 + var7 * 3];
-            blueIndex[var7] = tgaBuffer[18 + var7 * 3];
-            ++var7;
-         } while(var7 < 256);
+            redIndex[rgbIdx] = tgaBuffer[20 + rgbIdx * 3];
+            greenIndex[rgbIdx] = tgaBuffer[19 + rgbIdx * 3];
+            blueIndex[rgbIdx] = tgaBuffer[18 + rgbIdx * 3];
+            ++rgbIdx;
+         } while(rgbIdx < 256);
       }
 
       Uint8ClampedArray imageBytes = Uint8ClampedArray.create(width * height * 4);
-      int idx = 0;
-      int var11 = height - 1;
+      int byteIdx = 0;
+      int y = height - 1;
 
-      if(!var14 && var11 < 0) {
+      if(!var14 && y < 0) {
          return this.graphics.getContext().createImageData(1, 1);
       } else {
          do {
-            int var12 = 0;
-            if(!var14 && var12 >= width) {
-               --var11;
+            int x = 0;
+
+            if(!var14 && x >= width) {
+               --y;
             } else {
                do {
-                  //var9[idx++] = tgaBuffer[786 + var12 + var11 * width];
-                  int test = tgaBuffer[786 + var12 + var11 * width] & 0xff;
-                  imageBytes.set(idx++, redIndex[test] & 0xff);
-                  imageBytes.set(idx++, greenIndex[test] & 0xff);
-                  imageBytes.set(idx++, blueIndex[test] & 0xff);
-                  imageBytes.set(idx++, 255);
-                  ++var12;
-               } while(var12 < width);
+                  int pixel = tgaBuffer[786 + x + y * width] & 0xff;
+                  imageBytes.set(byteIdx++, redIndex[pixel] & 0xff);
+                  imageBytes.set(byteIdx++, greenIndex[pixel] & 0xff);
+                  imageBytes.set(byteIdx++, blueIndex[pixel] & 0xff);
+                  imageBytes.set(byteIdx++, 255);
+                  ++x;
+               } while(x < width);
 
-               --var11;
+               --y;
             }
-         } while(var11 >= 0);
+         } while(y >= 0);
       }
 
       ImageData imageData = this.graphics.getContext().createImageData(width, height);
@@ -667,6 +712,7 @@ public class GameShell {
    // $FF: renamed from: a (java.lang.String, int) java.net.Socket
    public Socket connect(String address, int port) throws IOException {
       Socket socket = new Socket(address, port);
+      socket.connect();
       //socket.setSoTimeout(30000);
       //socket.setTcpNoDelay(true);
       return socket;

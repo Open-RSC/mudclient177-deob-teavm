@@ -1637,7 +1637,7 @@ public class mudclient extends GameConnection {
          }
 
       } else {
-         this.field_379.method_275(super.mouseX, super.mouseY, super.lastMouseButtonDown, super.field_35);
+         this.field_379.method_275(super.mouseX, super.mouseY, super.lastMouseButtonDown, super.mouseButtonDown);
          int var1 = 0;
          int var3;
          if(var8 != 0 || var1 < 5) {
@@ -1885,7 +1885,7 @@ public class mudclient extends GameConnection {
 
    // $FF: renamed from: M () void
    public void method_71() {
-      this.field_401.method_275(super.mouseX, super.mouseY, super.lastMouseButtonDown, super.field_35);
+      this.field_401.method_275(super.mouseX, super.mouseY, super.lastMouseButtonDown, super.mouseButtonDown);
       if(this.field_401.method_276(this.field_403)) {
          this.field_401.setFocus(this.field_404);
       }
@@ -2016,7 +2016,7 @@ public class mudclient extends GameConnection {
    // $FF: renamed from: P () void
    public void method_74() {
       int var1 = GameData.field_563;
-      this.panelAppearance.method_275(super.mouseX, super.mouseY, super.lastMouseButtonDown, super.field_35);
+      this.panelAppearance.method_275(super.mouseX, super.mouseY, super.lastMouseButtonDown, super.mouseButtonDown);
       if(this.panelAppearance.method_276(this.field_365)) {
          do {
             do {
@@ -2386,7 +2386,7 @@ public class mudclient extends GameConnection {
       }
 
       if(this.loginScreen == 0) {
-         this.panelLoginWelcome.method_275(super.mouseX, super.mouseY, super.lastMouseButtonDown, super.field_35);
+         this.panelLoginWelcome.method_275(super.mouseX, super.mouseY, super.lastMouseButtonDown, super.mouseButtonDown);
          if(this.panelLoginWelcome.method_276(this.field_343)) {
             this.loginScreen = 1;
             this.panelLoginNewuser.updateText(this.field_349, "");
@@ -2409,7 +2409,7 @@ public class mudclient extends GameConnection {
          String userName;
          String password;
          if(this.loginScreen == 1) {
-            this.panelLoginNewuser.method_275(super.mouseX, super.mouseY, super.lastMouseButtonDown, super.field_35);
+            this.panelLoginNewuser.method_275(super.mouseX, super.mouseY, super.lastMouseButtonDown, super.mouseButtonDown);
             if(this.panelLoginNewuser.method_276(this.field_349)) {
                this.panelLoginNewuser.setFocus(this.field_350);
             }
@@ -2464,7 +2464,7 @@ public class mudclient extends GameConnection {
             int var3;
             String var5;
             if(this.loginScreen == 2) {
-               this.panelLoginExistingUser.method_275(super.mouseX, super.mouseY, super.lastMouseButtonDown, super.field_35);
+               this.panelLoginExistingUser.method_275(super.mouseX, super.mouseY, super.lastMouseButtonDown, super.mouseButtonDown);
                if(this.panelLoginExistingUser.method_276(this.field_358)) {
                   this.loginScreen = 0;
                }
@@ -2555,7 +2555,7 @@ public class mudclient extends GameConnection {
                   }
                }
             } else if(this.loginScreen == 3) {
-               this.field_390.method_275(super.mouseX, super.mouseY, super.lastMouseButtonDown, super.field_35);
+               this.field_390.method_275(super.mouseX, super.mouseY, super.lastMouseButtonDown, super.mouseButtonDown);
                if(this.field_390.method_276(this.field_396)) {
                   userName = this.field_390.method_308(this.field_394);
                   password = this.field_390.method_308(this.field_395);
@@ -2764,7 +2764,7 @@ public class mudclient extends GameConnection {
 
       this.mouseButtonClick = 0;
       super.lastMouseButtonDown = 0;
-      super.field_35 = 0;
+      super.mouseButtonDown = 0;
       this.field_297 = false;
       this.field_305 = false;
       this.isSleeping = false;
@@ -3415,10 +3415,10 @@ public class mudclient extends GameConnection {
                   }
 
                   super.lastMouseButtonDown = 0;
-                  super.field_35 = 0;
+                  super.mouseButtonDown = 0;
                }
 
-               this.panelMessageTabs.method_275(super.mouseX, super.mouseY, super.lastMouseButtonDown, super.field_35);
+               this.panelMessageTabs.method_275(super.mouseX, super.mouseY, super.lastMouseButtonDown, super.mouseButtonDown);
                if(this.messageTabSelected > 0 && super.mouseX >= 494 && super.mouseY >= this.gameHeight - 66) {
                   super.lastMouseButtonDown = 0;
                }
@@ -3478,7 +3478,7 @@ public class mudclient extends GameConnection {
                label952: {
                   if(this.field_276 || this.field_249) {
                      label492: {
-                        if(super.field_35 != 0) {
+                        if(super.mouseButtonDown != 0) {
                            ++this.mouseButtonDownTime;
                            if(var9 == 0) {
                               break label492;
@@ -10769,7 +10769,7 @@ public class mudclient extends GameConnection {
          int var15 = super.mouseY - 36;
          if(var2 >= 0 && var15 >= 0 && var2 < var4 && var15 < var5) {
             if(this.field_211 == 1) {
-               this.panelQuestList.method_275(var2 + (this.surface.field_723 - 199), var15 + 36, super.lastMouseButtonDown, super.field_35);
+               this.panelQuestList.method_275(var2 + (this.surface.field_723 - 199), var15 + 36, super.lastMouseButtonDown, super.mouseButtonDown);
             }
 
             if(var15 <= 24 && this.mouseButtonClick == 1) {
@@ -10933,7 +10933,7 @@ public class mudclient extends GameConnection {
          var2 = super.mouseX - (this.surface.field_723 - 199);
          int var17 = super.mouseY - 36;
          if(var2 >= 0 && var17 >= 0 && var2 < 196 && var17 < 182) {
-            this.panelMagic.method_275(var2 + (this.surface.field_723 - 199), var17 + 36, super.lastMouseButtonDown, super.field_35);
+            this.panelMagic.method_275(var2 + (this.surface.field_723 - 199), var17 + 36, super.lastMouseButtonDown, super.mouseButtonDown);
             if(var17 <= 24 && this.mouseButtonClick == 1) {
                label128: {
                   if(var2 < 98 && this.field_203 == 1) {
@@ -11193,7 +11193,7 @@ public class mudclient extends GameConnection {
          var2 = super.mouseX - (this.surface.field_723 - 199);
          int var11 = super.mouseY - 36;
          if(var2 >= 0 && var11 >= 0 && var2 < 196 && var11 < 182) {
-            this.panelSocialList.method_275(var2 + (this.surface.field_723 - 199), var11 + 36, super.lastMouseButtonDown, super.field_35);
+            this.panelSocialList.method_275(var2 + (this.surface.field_723 - 199), var11 + 36, super.lastMouseButtonDown, super.mouseButtonDown);
             if(var11 <= 24 && this.mouseButtonClick == 1) {
                label121: {
                   if(var2 < 98 && this.field_207 == 1) {
@@ -12606,6 +12606,7 @@ public class mudclient extends GameConnection {
    // $FF: renamed from: a (java.lang.String, int) java.net.Socket
    public Socket connect(String address, int port) throws IOException {
       Socket socket = new Socket(address, port);
+      socket.connect();
       //socket.setSoTimeout(30000);
       //socket.setTcpNoDelay(true);
       return socket;
