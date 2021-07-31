@@ -1,5 +1,8 @@
 package mudclient;
 
+import org.teavm.jso.canvas.ImageData;
+import org.teavm.jso.typedarrays.Uint8ClampedArray;
+
 // $FF: renamed from: a.a.g
 public class Surface {
 
@@ -8,7 +11,7 @@ public class Surface {
    // $FF: renamed from: b int
    public int field_724;
    // $FF: renamed from: c int
-   public int field_725;
+   public int area;
    // $FF: renamed from: d int
    public int field_726;
    // $FF: renamed from: e int
@@ -16,9 +19,9 @@ public class Surface {
    // $FF: renamed from: g int[]
    public int[] pixels;
    // $FF: renamed from: i java.awt.Component
-   private mudclient field_731;
+   private mudclient mudclient;
    // $FF: renamed from: j java.awt.Image
-   public Image field_732;
+   public ImageData imageData;
    // $FF: renamed from: k int[][]
    public int[][] spritePixels;
    // $FF: renamed from: l byte[][]
@@ -74,59 +77,35 @@ public class Surface {
    // $FF: renamed from: K boolean
    public static boolean field_759;
 
+   private Uint8ClampedArray rgbPixels;
+
    // $FF: renamed from: <init> (int, int, int, java.awt.Component) void
-   public Surface(int width, int height, int var3, mudclient var4) {
+   public Surface(int width, int height, int spriteLimit, mudclient var4) {
       super();
 
       this.interlace = false;
       this.loggedIn = false;
-      this.field_731 = var4;
+      this.mudclient = var4;
       this.field_744 = height;
       this.field_746 = width;
       this.field_726 = width;
       this.field_723 = width;
       this.field_727 = height;
       this.field_724 = height;
-      this.field_725 = width * height;
+      this.area = width * height;
       this.pixels = new int[width * height];
-      this.spritePixels = new int[var3][];
-      this.field_742 = new boolean[var3];
-      this.spriteColoursUsed = new byte[var3][];
-      this.spriteColourList = new int[var3][];
-      this.field_736 = new int[var3];
-      this.field_737 = new int[var3];
-      this.spriteWidthFull = new int[var3];
-      this.field_741 = new int[var3];
-      this.field_738 = new int[var3];
-      this.field_739 = new int[var3];
-
-      if(width > 1 && height > 1 && var4 != null) {
-         int var5 = this.field_723 * this.field_724;
-         int var6 = 0;
-         if(field_759 || var6 < var5) {
-            do {
-               this.pixels[var6] = 0;
-               ++var6;
-            } while(var6 < var5);
-         }
-
-         this.field_732 = var4.createImage(this);
-         this.draw();
-         var4.prepareImage(this.field_732, var4);
-         this.draw();
-         var4.prepareImage(this.field_732, var4);
-         this.draw();
-         var4.prepareImage(this.field_732, var4);
-      }
-
-   }
-
-   // $FF: renamed from: a () void
-   public void draw() {
-      if(this.field_730 != null) {
-         this.field_730.setPixels(0, 0, this.field_723, this.field_724, this.field_728, this.pixels, 0, this.field_723);
-         this.field_730.imageComplete(2);
-      }
+      this.spritePixels = new int[spriteLimit][];
+      this.field_742 = new boolean[spriteLimit];
+      this.spriteColoursUsed = new byte[spriteLimit][];
+      this.spriteColourList = new int[spriteLimit][];
+      this.field_736 = new int[spriteLimit];
+      this.field_737 = new int[spriteLimit];
+      this.spriteWidthFull = new int[spriteLimit];
+      this.field_741 = new int[spriteLimit];
+      this.field_738 = new int[spriteLimit];
+      this.field_739 = new int[spriteLimit];
+      this.rgbPixels = Uint8ClampedArray.create(width * height * 4);
+      this.imageData = mudclient.getGraphics().getContext().createImageData(width, height);
    }
 
    // $FF: renamed from: a (int, int, int, int) void
@@ -162,9 +141,17 @@ public class Surface {
    }
 
    // $FF: renamed from: a (java.awt.Graphics, int, int) void
-   public void draw(Graphics var1, int var2, int var3) {
-      this.draw();
-      var1.drawImage(this.field_732, var2, var3, this);
+   public void draw(Graphics graphics, int x, int y) {
+      for (int i = 0; i < this.area * 4; i += 4) {                             
+         int pixel = this.pixels[i / 4];
+
+         this.rgbPixels.set(i, (pixel >> 16) & 255);                     
+         this.rgbPixels.set(i + 1, (pixel >> 8) & 255);                  
+         this.rgbPixels.set(i + 2, pixel & 255);                         
+         this.rgbPixels.set(i + 3, 255);                                 
+      }
+
+      graphics.drawImage(this.imageData, x, y);
    }
 
    // $FF: renamed from: c () void
@@ -3154,10 +3141,6 @@ public class Surface {
 
          return var3;
       }
-   }
-
-   public boolean imageUpdate(Image var1, int var2, int var3, int var4, int var5, int var6) {
-      return true;
    }
 
    // $FF: renamed from: <clinit> () void
