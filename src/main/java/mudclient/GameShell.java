@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.teavm.jso.canvas.ImageData;
 import org.teavm.jso.dom.html.HTMLCanvasElement;
 import org.teavm.jso.dom.html.HTMLDocument;
+import org.teavm.jso.typedarrays.Uint8ClampedArray;
 
 // $FF: renamed from: a.a.a
 public class GameShell {
@@ -564,52 +565,54 @@ public class GameShell {
 
    // $FF: renamed from: a (byte[]) java.awt.Image
    public ImageData parseTGA(byte[] tgaBuffer) {
-      return this.graphics.getContext().createImageData(1, 1);
-      /*boolean var14 = Surface.field_759;
-      int var2 = tgaBuffer[13] * 256 + tgaBuffer[12];
-      int var3 = tgaBuffer[15] * 256 + tgaBuffer[14];
-      byte[] var4 = new byte[256];
-      byte[] var5 = new byte[256];
-      byte[] var6 = new byte[256];
+      boolean var14 = Surface.field_759;
+
+      int width = tgaBuffer[13] * 256 + tgaBuffer[12];
+      int height = tgaBuffer[15] * 256 + tgaBuffer[14];
+      byte[] redIndex = new byte[256];
+      byte[] greenIndex = new byte[256];
+      byte[] blueIndex = new byte[256];
       int var7 = 0;
       if(var14 || var7 < 256) {
          do {
-            var4[var7] = tgaBuffer[20 + var7 * 3];
-            var5[var7] = tgaBuffer[19 + var7 * 3];
-            var6[var7] = tgaBuffer[18 + var7 * 3];
+            redIndex[var7] = tgaBuffer[20 + var7 * 3];
+            greenIndex[var7] = tgaBuffer[19 + var7 * 3];
+            blueIndex[var7] = tgaBuffer[18 + var7 * 3];
             ++var7;
          } while(var7 < 256);
       }
 
-      IndexColorModel var8 = new IndexColorModel(8, 256, var4, var5, var6);
-      byte[] var9 = new byte[var2 * var3];
-      int var10 = 0;
-      int var11 = var3 - 1;
-      Image var13;
-      MemoryImageSource var15;
+      Uint8ClampedArray imageBytes = Uint8ClampedArray.create(width * height * 4);
+      int idx = 0;
+      int var11 = height - 1;
+
       if(!var14 && var11 < 0) {
-         var15 = new MemoryImageSource(var2, var3, var8, var9, 0, var2);
-         var13 = this.createImage(var15);
-         return var13;
+         return this.graphics.getContext().createImageData(1, 1);
       } else {
          do {
             int var12 = 0;
-            if(!var14 && var12 >= var2) {
+            if(!var14 && var12 >= width) {
                --var11;
             } else {
                do {
-                  var9[var10++] = tgaBuffer[786 + var12 + var11 * var2];
+                  //var9[idx++] = tgaBuffer[786 + var12 + var11 * width];
+                  int test = tgaBuffer[786 + var12 + var11 * width] & 0xff;
+                  imageBytes.set(idx++, redIndex[test] & 0xff);
+                  imageBytes.set(idx++, greenIndex[test] & 0xff);
+                  imageBytes.set(idx++, blueIndex[test] & 0xff);
+                  imageBytes.set(idx++, 255);
                   ++var12;
-               } while(var12 < var2);
+               } while(var12 < width);
 
                --var11;
             }
          } while(var11 >= 0);
+      }
 
-         var15 = new MemoryImageSource(var2, var3, var8, var9, 0, var2);
-         var13 = this.createImage(var15);
-         return var13;
-      }*/
+      ImageData imageData = this.graphics.getContext().createImageData(width, height);
+      imageData.setData(imageBytes);
+
+      return imageData;
    }
 
    // $FF: renamed from: a (java.lang.String, java.lang.String, int) byte[]
