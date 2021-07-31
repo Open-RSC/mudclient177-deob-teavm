@@ -776,9 +776,9 @@ public class mudclient extends GameConnection {
    public static void main(String[] var0) {
       mudclient var1 = new mudclient();
       var1.appletMode = false;
-      if(var0.length > 0 && var0[0].equals("members")) {
+      //if(var0.length > 0 && var0[0].equals("members")) {
          var1.members = true;
-      }
+      //}
 
       if(var0.length > 1) {
          var1.address = var0[1];
@@ -1402,7 +1402,7 @@ public class mudclient extends GameConnection {
       this.confirmLogout();
       this.disposeAndCollect();
       if(this.audioPlayer != null) {
-         this.audioPlayer.method_318();
+         this.audioPlayer.stop();
       }
 
    }

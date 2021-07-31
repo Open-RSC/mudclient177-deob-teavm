@@ -1,62 +1,57 @@
 package mudclient;
 
-import java.io.InputStream;
+import org.teavm.jso.typedarrays.Float32Array;
+import org.teavm.jso.webaudio.AudioBuffer;
+import org.teavm.jso.webaudio.AudioBufferSourceNode;
+import org.teavm.jso.webaudio.AudioContext;
 
 // $FF: renamed from: a.a.d
-public class StreamAudioPlayer extends InputStream {
+public class StreamAudioPlayer {
+   private AudioContext audioContext = AudioContext.create();
 
-   // $FF: renamed from: a byte[]
-   byte[] field_817;
-   // $FF: renamed from: b int
-   int field_818;
-   // $FF: renamed from: c int
-   int field_819;
+   final static int SAMPLE_RATE = 8000;
 
+   final static int SIGN_BIT = 0x80;
+   final static int QUANT_MASK = 0xf;
+   final static int SEG_SHIFT = 4;
+   final static int SEG_MASK = 0x70;
+   final static int BIAS = 0x84;
+
+   private static Float32Array ulawToLinear(byte[] ulaw, int offset, int length) {
+      Float32Array output = Float32Array.create(length);
+      int t;
+      int ulawVal;
+      int ulawIdx = offset;
+      int outIdx = 0;
+
+      for (int i = 0; i < length; i++) {
+          ulawVal = ~(ulaw[ulawIdx++]) & 0xff;
+          t = ((ulawVal & QUANT_MASK) << 3) + BIAS;
+          t <<= (ulawVal & SEG_MASK) >> SEG_SHIFT;
+          short sample = (short) ((ulawVal & SIGN_BIT) != 0 ? (BIAS - t) : (t - BIAS));
+          output.set(outIdx++, (float) sample / 32767f);
+      }
+
+      return output;
+   }
 
    // $FF: renamed from: <init> () void
    public StreamAudioPlayer() {
-      super();
    }
 
    // $FF: renamed from: a () void
-   public void method_318() {
+   public void stop() {
+      this.audioContext.close();
    }
 
    // $FF: renamed from: a (byte[], int, int) void
-   public void writeStream(byte[] var1, int var2, int var3) {
-      this.field_817 = var1;
-      this.field_818 = var2;
-      this.field_819 = var2 + var3;
-   }
+   public void writeStream(byte[] soundData, int offset, int length) {
+      AudioBuffer buffer = this.audioContext.createBuffer(1, length, SAMPLE_RATE);
+      buffer.getChannelData(0).set(ulawToLinear(soundData, offset, length));
 
-   public int read(byte[] var1, int var2, int var3) {
-      boolean var5 = Surface.field_759;
-      int var4 = 0;
-      if(!var5 && var4 >= var3) {
-         return var3;
-      } else {
-         do {
-            label16: {
-               if(this.field_818 < this.field_819) {
-                  var1[var2 + var4] = this.field_817[this.field_818++];
-                  if(!var5) {
-                     break label16;
-                  }
-               }
-
-               var1[var2 + var4] = -1;
-            }
-
-            ++var4;
-         } while(var4 < var3);
-
-         return var3;
-      }
-   }
-
-   public int read() {
-      byte[] var1 = new byte[1];
-      this.read(var1, 0, 1);
-      return var1[0];
+      AudioBufferSourceNode bufferSource = audioContext.createBufferSource();
+      bufferSource.setBuffer(buffer);
+      bufferSource.connect(this.audioContext.getDestination());      
+      bufferSource.start();
    }
 }
