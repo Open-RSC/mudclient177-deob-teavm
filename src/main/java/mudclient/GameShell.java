@@ -63,8 +63,6 @@ public class GameShell {
    public boolean keyLeftDown;
    // $FF: renamed from: A boolean
    public boolean keyRightDown;
-   // $FF: renamed from: D boolean
-   public boolean keySpaceDown;
    // $FF: renamed from: F int
    public int field_32;
    // $FF: renamed from: G int
@@ -91,6 +89,7 @@ public class GameShell {
    public String pmToSend;
 
    private HTMLCanvasElement canvas;
+   private boolean ignoreInterlace = false;
 
    // $FF: renamed from: a () void
    public void startGame() {}
@@ -155,11 +154,15 @@ public class GameShell {
                                                                            
             char charCode =                                                 
                event.getKey().length() == 1 ? event.getKey().charAt(0) : (char) code;
-                                                                           
+
+            if (charCode == 112 && code == 80) {
+               ignoreInterlace = true;
+            }
+
             if (code == 8 || code == 13 || code == 10 || code == 9) {       
                charCode = (char) code;                                     
             }
-                                                                           
+
             keyDown(charCode);
          }                                                                   
       });                                                                     
@@ -208,17 +211,21 @@ public class GameShell {
       this.field_38 = code;
       this.lastMouseAction = 0;
 
-      if(code == KeyEvent.VK_LEFT) {
+      if (code == KeyEvent.VK_LEFT) {
          this.keyLeftDown = true;
       } else if (code == KeyEvent.VK_RIGHT) {
          this.keyRightDown = true;
-      } else if ((char)code == KeyEvent.VK_SPACE) {
-         this.keySpaceDown = true;
-      } else if ((char)code == KeyEvent.VK_F1) {
-         this.interlace = !this.interlace;
       } else {
          // quick hack for now to prevent those keys from inputting into the chat box
          this.handleKeyPress(code);
+      }
+
+      if (!ignoreInterlace) {
+         if ((char)code == KeyEvent.VK_F1) {
+            this.interlace = !this.interlace;
+         }
+      } else {
+         this.ignoreInterlace = false;
       }
 
       boolean isText = false;
@@ -271,10 +278,6 @@ public class GameShell {
 
       if(var2 == KeyEvent.VK_RIGHT) {
          this.keyRightDown = false;
-      }
-
-      if((char)var2 == KeyEvent.VK_SPACE) {
-         this.keySpaceDown = false;
       }
 
       return true;
@@ -730,7 +733,6 @@ public class GameShell {
       this.helvetica = new Font("Helvetica", 0, 12);
       this.keyLeftDown = false;
       this.keyRightDown = false;
-      this.keySpaceDown = false;
       this.field_32 = 1;
       this.interlace = false;
       this.inputTextCurrent = "";
