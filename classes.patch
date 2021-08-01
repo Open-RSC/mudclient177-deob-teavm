@@ -1,0 +1,12 @@
+86c86
+< |0]&255;r=m+1|0;s=l[q]&255;n[m]=s;m=r+1|0;s=k[q]&255;n[r]=s;s=m+1|0;r=j[q]&255;n[m]=r;m=s+1|0;n[s]=255;p=p+1|0;if(p>=d)break;}o=o+(-1)|0;}if(o<0)break;}t=a.bI.bA;u=d;v=e;w=t.createImageData(u,v);w.data=n;return w;}
+---
+> |0]&255;r=m+1|0;s=l[q]&255;n[m]=s;m=r+1|0;s=k[q]&255;n[r]=s;s=m+1|0;r=j[q]&255;n[m]=r;m=s+1|0;n[s]=255;p=p+1|0;if(p>=d)break;}o=o+(-1)|0;}if(o<0)break;}t=a.bI.bA;u=d;v=e;w=t.createImageData(u,v);w.data.set(n);return w;}
+1108c1108
+< function DB(a,b,c,d){var e,f,g,h,i,j,k,l,m;e=0;while(e<(a.s2*4|0)){f=a.bk.data[e/4|0];g=a.lC;h=f>>16&255;g[e]=h;g=a.lC;h=e+1|0;i=f>>8&255;g[h]=i;j=a.lC;h=e+2|0;i=f&255;j[h]=i;a.lC[e+3|0]=255;e=e+4|0;}k=a.rE;g=a.lC;k.data=g;j=a.rE;b=b.bA;l=c;m=d;b.putImageData(j,l,m);}
+---
+> function DB(a,b,c,d){var e,f,g,h,i,j,k,l,m;e=0;while(e<(a.s2*4|0)){f=a.bk.data[e/4|0];g=a.lC;h=f>>16&255;g[e]=h;g=a.lC;h=e+1|0;i=f>>8&255;g[h]=i;j=a.lC;h=e+2|0;i=f&255;j[h]=i;a.lC[e+3|0]=255;e=e+4|0;}k=a.rE;g=a.lC;k.data.set(g);j=a.rE;b=b.bA;l=c;m=d;b.putImageData(j,l,m);}
+2509c2509
+< function KG(a,b,c,d){var e,f,g;e=new Int8Array(d);f=0;while(f<d){g=b.data[c+f|0];e[f]=g;f=f+1|0;}a.jC.send("toSend");}
+---
+> function KG(a,b,c,d){var e,f,g;e=new Int8Array(d);f=0;while(f<d){g=b.data[c+f|0];e[f]=g;f=f+1|0;}a.jC.send(e);}

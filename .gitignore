@@ -22,3 +22,4 @@ org.sonarlint.eclipse.core.prefs
 *.iml
 *.eml
 
+target/
