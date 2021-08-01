@@ -154,11 +154,11 @@ public class GameShell {
             int code = event.getKeyCode();                                  
                                                                            
             char charCode =                                                 
-               event.getKey().length() == 1 ? event.getKey().charAt(0) : 65535;
+               event.getKey().length() == 1 ? event.getKey().charAt(0) : (char) code;
                                                                            
             if (code == 8 || code == 13 || code == 10 || code == 9) {       
                charCode = (char) code;                                     
-            }                                                               
+            }
                                                                            
             keyDown(charCode);
          }                                                                   
@@ -202,35 +202,31 @@ public class GameShell {
       }
    }
 
-   public boolean keyDown(int var2) {
+   public boolean keyDown(int code) {
       boolean var5 = Surface.field_759;
-      this.method_11(var2);
-      this.field_37 = var2;
-      this.field_38 = var2;
+      this.field_37 = code;
+      this.field_38 = code;
       this.lastMouseAction = 0;
 
-      if(var2 == KeyEvent.VK_LEFT) {
+      if(code == KeyEvent.VK_LEFT) {
          this.keyLeftDown = true;
-      }
-
-      if(var2 == KeyEvent.VK_RIGHT) {
+      } else if (code == KeyEvent.VK_RIGHT) {
          this.keyRightDown = true;
-      }
-
-      if((char)var2 == KeyEvent.VK_SPACE) {
+      } else if ((char)code == KeyEvent.VK_SPACE) {
          this.keySpaceDown = true;
-      }
-
-      if((char)var2 == KeyEvent.VK_F1) {
+      } else if ((char)code == KeyEvent.VK_F1) {
          this.interlace = !this.interlace;
+      } else {
+         // quick hack for now to prevent those keys from inputting into the chat box
+         this.handleKeyPress(code);
       }
 
-      boolean var3 = false;
+      boolean isText = false;
       int var4 = 0;
       if(var5 || var4 < characterMap.length()) {
          do {
-            if(var2 == characterMap.charAt(var4)) {
-               var3 = true;
+            if(code == characterMap.charAt(var4)) {
+               isText = true;
                if(!var5) {
                   break;
                }
@@ -240,23 +236,23 @@ public class GameShell {
          } while(var4 < characterMap.length());
       }
 
-      if(var3 && this.inputTextCurrent.length() < 20) {
-         this.inputTextCurrent = this.inputTextCurrent + (char)var2;
+      if(isText && this.inputTextCurrent.length() < 20) {
+         this.inputTextCurrent = this.inputTextCurrent + (char)code;
       }
 
-      if(var3 && this.field_42.length() < 80) {
-         this.field_42 = this.field_42 + (char)var2;
+      if(isText && this.field_42.length() < 80) {
+         this.field_42 = this.field_42 + (char)code;
       }
 
-      if(var2 == 8 && this.inputTextCurrent.length() > 0) {
+      if(code == 8 && this.inputTextCurrent.length() > 0) {
          this.inputTextCurrent = this.inputTextCurrent.substring(0, this.inputTextCurrent.length() - 1);
       }
 
-      if(var2 == 8 && this.field_42.length() > 0) {
+      if(code == 8 && this.field_42.length() > 0) {
          this.field_42 = this.field_42.substring(0, this.field_42.length() - 1);
       }
 
-      if(var2 == 10 || var2 == 13) {
+      if(code == 10 || code == 13) {
          this.inputTextFinal = this.inputTextCurrent;
          this.pmToSend = this.field_42;
       }
@@ -265,7 +261,7 @@ public class GameShell {
    }
 
    // $FF: renamed from: b (int) void
-   public void method_11(int var1) {}
+   public void handleKeyPress(int var1) {}
 
    public boolean keyUp(int var2) {
       this.field_37 = 0;

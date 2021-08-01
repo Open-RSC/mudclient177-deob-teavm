@@ -11,25 +11,23 @@ public class StreamAudioPlayer {
 
    final static int SAMPLE_RATE = 8000;
 
-   final static int SIGN_BIT = 0x80;
-   final static int QUANT_MASK = 0xf;
-   final static int SEG_SHIFT = 4;
-   final static int SEG_MASK = 0x70;
-   final static int BIAS = 0x84;
+   final static private int SIGN_BIT = 0x80;
+   final static private int QUANT_MASK = 0xf;
+   final static private int SEG_SHIFT = 4;
+   final static private int SEG_MASK = 0x70;
+   final static private int BIAS = 0x84;
 
    private static Float32Array ulawToLinear(byte[] ulaw, int offset, int length) {
       Float32Array output = Float32Array.create(length);
-      int t;
-      int ulawVal;
       int ulawIdx = offset;
       int outIdx = 0;
 
       for (int i = 0; i < length; i++) {
-          ulawVal = ~(ulaw[ulawIdx++]) & 0xff;
-          t = ((ulawVal & QUANT_MASK) << 3) + BIAS;
-          t <<= (ulawVal & SEG_MASK) >> SEG_SHIFT;
-          short sample = (short) ((ulawVal & SIGN_BIT) != 0 ? (BIAS - t) : (t - BIAS));
-          output.set(outIdx++, (float) sample / 32767f);
+         int ulawVal = ~(ulaw[ulawIdx++]) & 0xff;
+         int t = ((ulawVal & QUANT_MASK) << 3) + BIAS;
+         t <<= (ulawVal & SEG_MASK) >> SEG_SHIFT;
+         short sample = (short) ((ulawVal & SIGN_BIT) != 0 ? (BIAS - t) : (t - BIAS));
+         output.set(outIdx++, (float) sample / 32767f);
       }
 
       return output;

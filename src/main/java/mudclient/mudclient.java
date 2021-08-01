@@ -3,6 +3,8 @@ package mudclient;
 import java.io.IOException;
 import java.math.BigInteger;
 
+import org.teavm.jso.browser.Location;
+
 public class mudclient extends GameConnection {
    // inauthentic boolean controlling if applet will launch
    public static boolean disableAppletHostCheck = true;
@@ -773,37 +775,46 @@ public class mudclient extends GameConnection {
    String[] recoveryQuestions;
 
 
-   public static void main(String[] var0) {
-      mudclient var1 = new mudclient();
-      var1.appletMode = false;
-      //if(var0.length > 0 && var0[0].equals("members")) {
-         var1.members = true;
-      //}
+   public static void main(String[] args) {
+      mudclient mud = new mudclient();
+      mud.appletMode = false;
 
-      if(var0.length > 1) {
-         var1.address = var0[1];
+      String[] webArgs = new String[0];
+      
+      String hash = Location.current().getHash();
+
+      if (hash != null && hash.length() > 0) {
+         webArgs = hash.substring(1).split(",");
       }
 
-      if(var0.length > 2) {
-         var1.port = Integer.parseInt(var0[2]);
+      if(webArgs.length > 0 && webArgs[0].equals("members")) {
+         mud.members = true;
+      }
+
+      if(webArgs.length > 1) {
+         mud.address = webArgs[1];
+      }
+
+      if(webArgs.length > 2) {
+         mud.port = Integer.parseInt(webArgs[2]);
       }
 
       // BEGIN INAUTHENTIC COMMAND LINE ARGUMENTS
-		 if(var0.length > 3) {
-			 var1.rsaExponent = new BigInteger(var0[3]);
-		 }
+		if(webArgs.length > 3) {
+		   mud.rsaExponent = new BigInteger(webArgs[3]);
+		}
 
-		 if(var0.length > 4) {
-			 var1.rsaModulus = new BigInteger(var0[4]);
-		 }
+		if(webArgs.length > 4) {
+		   mud.rsaModulus = new BigInteger(webArgs[4]);
+		}
 
-		 if (var0.length > 5) {
-		 	 Packet.reenableOpcodeEncryption = false;
-		 }
-		 // END INAUTHENTIC COMMAND LINE ARGUMENTS
+		if (webArgs.length > 5) {
+		   Packet.reenableOpcodeEncryption = false;
+		}
+		// END INAUTHENTIC COMMAND LINE ARGUMENTS
 
-      var1.startApplication(var1.gameWidth, var1.gameHeight + 11, "Runescape by Andrew Gower", false);
-      var1.field_32 = 10;
+      mud.startApplication(mud.gameWidth, mud.gameHeight + 11, "Runescape by Andrew Gower", false);
+      mud.field_32 = 10;
    }
 
    // $FF: renamed from: a () void
@@ -1444,7 +1455,7 @@ public class mudclient extends GameConnection {
    }
 
    // $FF: renamed from: b (int) void
-   public void method_11(int var1) {
+   public void handleKeyPress(int var1) {
       if(this.loggedIn == 0) {
          if(this.loginScreen == 0) {
             this.panelLoginWelcome.method_277(var1);
