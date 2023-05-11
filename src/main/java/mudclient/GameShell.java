@@ -1,15 +1,24 @@
 package mudclient;
 
 import java.io.IOException;
+import java.util.Date;
 
+import org.teavm.jso.JSBody;
+import org.teavm.jso.JSObject;
+import org.teavm.jso.browser.TimerHandler;
 import org.teavm.jso.canvas.ImageData;
+import org.teavm.jso.core.JSArray;
+import org.teavm.jso.core.JSNumber;
+import org.teavm.jso.core.JSString;
 import org.teavm.jso.dom.html.HTMLCanvasElement;
 import org.teavm.jso.dom.html.HTMLDocument;
+import org.teavm.jso.dom.html.HTMLInputElement;
 import org.teavm.jso.dom.html.TextRectangle;
-import org.teavm.jso.typedarrays.Uint8ClampedArray;
+import org.teavm.jso.dom.events.Event;
 import org.teavm.jso.dom.events.EventListener;
 import org.teavm.jso.dom.events.KeyboardEvent;
 import org.teavm.jso.dom.events.MouseEvent;
+import org.teavm.jso.typedarrays.Uint8ClampedArray;
 
 
 // $FF: renamed from: a.a.a
@@ -89,7 +98,11 @@ public class GameShell {
    public String pmToSend;
 
    private HTMLCanvasElement canvas;
+   private HTMLInputElement mobileInput;
+   private HTMLInputElement switchInput;
    private boolean ignoreInterlace = false;
+   private boolean notRotate = false;
+   private boolean notScroll = false;
 
    // $FF: renamed from: a () void
    public void startGame() {}
@@ -105,6 +118,70 @@ public class GameShell {
 
    // $FF: renamed from: e () void
    public void method_6() {}
+   
+   @JSBody(params = { "event", "clientX", "clientY" }, script = "return new MouseEvent('mousedown', { 'clientX': clientX, 'clientY': clientY });")
+   public static native MouseEvent mouseEvent(Event event, int clientX, int clientY);
+   
+   @JSBody(params = { "event", "keyChar" }, script = "return new KeyboardEvent('keydown', { 'key': keyChar ? keyChar : event.data });")
+   public static native KeyboardEvent keyEvent(Event event, String keyChar);
+   
+   public static KeyboardEvent keyEvent(Event event) {
+	   return keyEvent(event, "");
+   }
+   
+   @JSBody(params = { "event", "type" }, script = "return new event.constructor(type ? type : event.type, event);")
+   public static native Event clone(Event event, String type);
+   
+   @JSBody(params = { "message" }, script = "console.log(message)")
+   public static native void log(JSObject message);
+   
+   @JSBody(params = { "object", "property", "value" }, script = "object[property] = value")
+   public static native void setProperty(JSObject object, String property, JSObject value);
+   
+   @JSBody(params = { "object", "property", "elem" }, script = "return object[property]")
+   public static native <S extends JSObject> S getProperty(JSObject object, String property, S elem);
+   
+   @JSBody(params = { "handler", "delay" }, script = "return setTimeout(handler, delay);")
+   static native JSNumber setTimeout(TimerHandler handler, int delay);
+   
+   @JSBody(params = { "timeoutID" }, script = "clearTimeout(timeoutID);")
+   static native void clearTimeout(int timeoutID);
+   
+   @JSBody(params = { }, script = "return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)")
+   public static native boolean isMobile();
+   
+   @JSBody(params = { }, script = "return /NintendoBrowser/i.test(navigator.userAgent)")
+   public static native boolean isSwitch();
+   
+   int mx, my, nx, ny;
+   int mousePress;
+   double time = -1;
+   EventListener swipeMove, touchMove;
+   long lastSwipeRotate = 0L;
+   boolean backspaceWait = false;
+   int timerId = -1;
+   
+   public void rotate(boolean toRight) {
+	   if (lastSwipeRotate == 0 || new Date().getTime() > lastSwipeRotate + 5000L) {
+		   if (toRight) {
+			   keyRightDown = true;
+		   } else {
+			   keyLeftDown = true;
+		   }
+		   GameShell.setTimeout(() -> {
+			   keyLeftDown = false;
+			   keyRightDown = false;
+			   lastSwipeRotate = 0L;
+		   }, 50);
+	   }
+	   lastSwipeRotate = new Date().getTime();
+   }
+   
+   public boolean isOutsideCanvas(JSObject obj) {
+	   int clientX = getProperty(obj, "clientX", JSNumber.valueOf(0)).intValue();
+	   int clientY = getProperty(obj, "clientY", JSNumber.valueOf(0)).intValue();
+	   return clientX < 0 || clientX > width || clientY < 0 || clientY > height;
+   }
 
    // $FF: renamed from: a (int, int, java.lang.String, boolean) void
    public final void startApplication(int width, int height, String title, boolean var4) {
@@ -124,23 +201,137 @@ public class GameShell {
       this.canvas.addEventListener("mousedown", new EventListener<MouseEvent>(){
          public void handleEvent(MouseEvent event) {                         
              setMousePosition(event);                                        
-             mouseDown(event.getButton() == 2 ? 2 : 1);                   
+             mouseDown(event.getButton() == 2 ? 2 : 1);
+             
+             nx = mx = event.getScreenX();
+             ny = my = event.getScreenY();
+             ++mousePress;
+             time = ((JSNumber)event.getTimeStamp()).doubleValue();
+             
+             timerId = GameShell.setTimeout(() -> {
+                 mouseDown(2);
+  		   	 }, 1000).intValue();
+             
+             swipeMove = new EventListener<MouseEvent>(){
+                 public void handleEvent(MouseEvent event1) {
+                	 if (mousePress > 0 && ((JSNumber)event1.getTimeStamp()).doubleValue() > time + 100) {
+                		 if (event1.getScreenY() != ny || event1.getScreenX() != nx)
+                			 GameShell.clearTimeout(timerId);
+                		 if (Math.abs(event1.getScreenY() - ny) + 70 > Math.abs(event1.getScreenX() - nx) || Math.abs(event1.getScreenY() - ny) > 20) {
+                        	 
+                         } else if (event1.getScreenX() > mx){ //right w.r.t mouse down position
+                             rotate(true);
+                             mouseUp();
+                         } else {
+                        	 rotate(false);
+                        	 mouseUp();
+                         }
+                         ny = event1.getScreenY();
+                         nx = event1.getScreenX();
+                       }
+                 }
+             };
+             canvas.addEventListener("mousemove", swipeMove);
+             
+             canvas.addEventListener("mouseup", new EventListener<MouseEvent>(){
+                 public void handleEvent(MouseEvent event) {
+                	 GameShell.clearTimeout(timerId);
+                     canvas.removeEventListener("mouseMove", swipeMove);
+                 }                                                                   
+             });
+             
+             canvas.addEventListener("mouseleave", new EventListener<MouseEvent>(){
+                 public void handleEvent(MouseEvent event) {
+                	 GameShell.clearTimeout(timerId);
+                     canvas.removeEventListener("mouseMove", swipeMove);
+                 }                                                                   
+             });
          }                                                                   
      });                                                                     
                                                                              
      this.canvas.addEventListener("mouseup", new EventListener<MouseEvent>(){
-         public void handleEvent(MouseEvent event) {                         
+         public void handleEvent(MouseEvent event) { 
+        	 mousePress = Math.max(0, --mousePress);
              setMousePosition(event);                                        
              mouseUp();                                                
          }                                                                   
-     });                                                                     
+     });
+     
+     this.canvas.addEventListener("mouseleave", new EventListener<MouseEvent>(){
+         public void handleEvent(MouseEvent event) {
+        	 mousePress = Math.max(0, --mousePress);
+             setMousePosition(event);                                        
+             mouseUp(); 
+         }                                                                   
+     });
                                                                              
      this.canvas.addEventListener("mousemove", new EventListener<MouseEvent>(){
          public void handleEvent(MouseEvent event) {                         
              setMousePosition(event);                                        
              mouseMove();                                                   
          }                                                                   
-     });                                                                     
+     });
+     
+     this.canvas.addEventListener("touchstart", new EventListener<Event>(){
+         public void handleEvent(Event event) {
+        	 int clientX = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "clientX", JSNumber.valueOf(0)).intValue();
+             int clientY = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "clientY", JSNumber.valueOf(0)).intValue();
+             MouseEvent mouseEvt = mouseEvent(event, clientX, clientY);
+             setMousePosition(mouseEvt);
+             
+        	 mx = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "screenX", JSNumber.valueOf(0)).intValue();
+        	 my = getProperty(getProperty(event, "changedTouches", JSArray.create(1)).get(0), "screenY", JSNumber.valueOf(0)).intValue();
+             time = ((JSNumber)event.getTimeStamp()).doubleValue();
+             
+             timerId = GameShell.setTimeout(() -> {
+                 mouseDown(2);
+  		   	 }, 1000).intValue();
+             
+             touchMove = new EventListener<Event>(){
+                 public void handleEvent(Event event1) {
+                	 if(isOutsideCanvas(getProperty(event1, "changedTouches", JSArray.create(1)).get(0))) {
+                		 canvas.removeEventListener("touchmove", touchMove);
+                	 }
+                	 
+                	 int posX = getProperty(getProperty(event1, "changedTouches", JSArray.create(1)).get(0), "screenX", JSNumber.valueOf(0)).intValue();
+                	 int posY = getProperty(getProperty(event1, "changedTouches", JSArray.create(1)).get(0), "screenY", JSNumber.valueOf(0)).intValue();
+                	 if (((JSNumber)event1.getTimeStamp()).doubleValue() > time + 100) {
+                		 if (Math.abs(posY - my) > 5 || Math.abs(posX - mx) > 5) //Firefox event may change slightly X/Y when holding touch on one point
+                			 GameShell.clearTimeout(timerId);
+                		 if (Math.abs(posY - my) + 70 > Math.abs(posX - mx) || Math.abs(posY - my) > 20) {
+                			 if (Math.abs(posX - mx) <= 20 && Math.abs(posY - my) > 10) { //assure on browsers user wants scroll
+                				 int clientX = getProperty(getProperty(event1, "changedTouches", JSArray.create(1)).get(0), "clientX", JSNumber.valueOf(0)).intValue();
+                                 int clientY = getProperty(getProperty(event1, "changedTouches", JSArray.create(1)).get(0), "clientY", JSNumber.valueOf(0)).intValue();
+                                 MouseEvent mouseEvt = mouseEvent(event1, clientX, clientY);
+                    			 setMousePosition(mouseEvt);
+                    			 mouseDown(1);
+                                 mouseMove(); 
+                			 }
+                         } else if (posX > mx){ //right w.r.t mouse down position
+                             rotate(true);
+                         } else {
+                        	 rotate(false);
+                         }
+                       }
+                 }
+             };
+             canvas.addEventListener("touchmove", touchMove);
+             
+             canvas.addEventListener("touchend", new EventListener<Event>(){
+                 public void handleEvent(Event event) {
+                	 GameShell.clearTimeout(timerId);
+                	 canvas.removeEventListener("touchmove", touchMove);
+                 }                                                                   
+             });
+             
+             canvas.addEventListener("touchcancel", new EventListener<Event>(){
+                 public void handleEvent(Event event) {
+                	 GameShell.clearTimeout(timerId);
+                	 canvas.removeEventListener("touchmove", touchMove);
+                 }                                                                   
+             });
+         }
+     });
                                                                              
      this.canvas.addEventListener("contextmenu", new EventListener<MouseEvent>(){
          public void handleEvent(MouseEvent event) {                         
@@ -149,14 +340,22 @@ public class GameShell {
      });
 
       this.canvas.addEventListener("keydown", new EventListener<KeyboardEvent>(){
-         public void handleEvent(KeyboardEvent event) {                      
-            int code = event.getKeyCode();                                  
+         public void handleEvent(KeyboardEvent event) {
+            int code = event.getKeyCode();
                                                                            
             char charCode =                                                 
                event.getKey().length() == 1 ? event.getKey().charAt(0) : (char) code;
 
-            if (charCode == 112 && code == 80) {
+            if (charCode == 112 && (code == 80 || isMobile() || isSwitch())) {
                ignoreInterlace = true;
+            }
+            
+            if ((charCode == 37 || charCode == 39)) {
+            	notRotate = charCode != (char) code;
+            }
+            
+            if ((charCode == 38 || charCode == 40)) {
+            	notScroll = charCode != (char) code;
             }
 
             if (code == 8 || code == 13 || code == 10 || code == 9) {       
@@ -172,12 +371,101 @@ public class GameShell {
             int code = event.getKeyCode();
             keyUp(code);
          }
-      });                                                                     
+      });
+      
+      
+      this.mobileInput = (HTMLInputElement) HTMLDocument.current().createElement("input");
+      this.mobileInput.setAttribute("type", "password");
+      this.mobileInput.setAttribute("placeholder", "CLICK TO OPEN KEYBOARD");
+      this.mobileInput.setAttribute("style", "width:512px; height:15px;");
+      this.mobileInput.setAttribute("autocorrect", "off");
+      this.mobileInput.setAttribute("autocapitalize", "none");
+      this.mobileInput.setAttribute("autocomplete", "off");
+      this.mobileInput.setAttribute("maxlength", "1");
+      
+      this.switchInput = (HTMLInputElement) HTMLDocument.current().createElement("input");
+      this.switchInput.setAttribute("type", "password");
+      this.switchInput.setAttribute("placeholder", "CLICK TO OPEN KEYBOARD");
+      this.switchInput.setAttribute("style", "width:512px; height:15px;");
+      this.switchInput.setAttribute("autocorrect", "off");
+      this.switchInput.setAttribute("autocapitalize", "none");
+      this.switchInput.setAttribute("autocomplete", "off");
+      this.switchInput.setAttribute("maxlength", "1");
+      
+      this.mobileInput.addEventListener("keydown", new EventListener<KeyboardEvent>(){
+          public void handleEvent(KeyboardEvent evt)  {
+        	  int code = evt.getKeyCode();
+        	  if (evt.getKey().equals("Backspace") || evt.getKey().equals("Enter")) {
+        		  Event event = GameShell.clone((Event)evt, "keydown");
+            	  canvas.dispatchEvent(event);
+        	  } else if (code == KeyEvent.VK_F1) {
+        		  ignoreInterlace = false;
+        		  keyDown(KeyEvent.VK_F1);
+        	  } else if (code == KeyEvent.VK_RIGHT) {
+        		  rotate(true);
+        	  } else if (code == KeyEvent.VK_LEFT) {
+        		  rotate(false);
+        	  } else if (code == 229) {
+        		  backspaceWait = true;
+        		  GameShell.setTimeout(() -> {
+        			  if (backspaceWait) {
+        				  keyDown(8);
+        				  backspaceWait = false;
+        			  }
+        		  }, 25);
+        	  }
+          }  
+      });
+      
+      this.mobileInput.addEventListener("input", new EventListener<Event>(){
+          public void handleEvent(Event evt) {
+        	  backspaceWait = false;
+        	  String val = mobileInput.getValue();
+        	  KeyboardEvent event = keyEvent(evt, val.substring(val.length() - 1));
+        	  canvas.dispatchEvent(event);
+        	  mobileInput.setValue("");
+        	  String valData = getProperty(evt, "data", JSString.valueOf("")).stringValue();
+        	  // mobile code for interlace
+        	  if (valData.equalsIgnoreCase("¹")) {
+        		  ignoreInterlace = false;
+        		  keyDown(KeyEvent.VK_F1);
+        	  } else if (valData.equalsIgnoreCase("→")) {
+        		  rotate(true);
+        	  } else if (valData.equalsIgnoreCase("←")) {
+        		  rotate(false);
+        	  }
+          }                                                                   
+       });
+      
+      this.switchInput.addEventListener("textInput", new EventListener<Event>(){
+          public void handleEvent(Event evt)  {
+        	  String val = getProperty(evt, "data", JSString.valueOf("")).stringValue();
+        	  for (char c : val.toCharArray()) {
+        		  keyDown(c);  
+        	  }
+          }  
+      });
+      
+      this.switchInput.addEventListener("input", new EventListener<Event>(){
+          public void handleEvent(Event evt)  {
+        	  if (getProperty(evt, "inputType", JSString.valueOf("")).stringValue().equals("deleteContentBackward")) {
+        		  keyDown(8);
+            	  switchInput.setValue("1");
+        	  }
+          }  
+      });
   
 
       this.graphics = new Graphics(this.canvas);
 
       HTMLDocument.current().getBody().appendChild(this.canvas);
+      if (isMobile()) {
+    	  HTMLDocument.current().getBody().appendChild(HTMLDocument.current().createElement("br"));
+          HTMLDocument.current().getBody().appendChild(this.mobileInput);  
+      } else if (isSwitch()) {
+    	  HTMLDocument.current().getBody().appendChild(HTMLDocument.current().createElement("br"));
+          HTMLDocument.current().getBody().appendChild(this.switchInput);
+      }
 
       this.start();
       this.run();
@@ -211,14 +499,19 @@ public class GameShell {
       this.field_38 = code;
       this.lastMouseAction = 0;
 
-      if (code == KeyEvent.VK_LEFT) {
+      if (code == KeyEvent.VK_LEFT && !(notRotate || isMobile() || isSwitch())) {
          this.keyLeftDown = true;
-      } else if (code == KeyEvent.VK_RIGHT) {
+      } else if (code == KeyEvent.VK_RIGHT && !(notRotate || isMobile() || isSwitch())) {
          this.keyRightDown = true;
+      } else if (code == KeyEvent.VK_F1 && !ignoreInterlace) {
+    	  // avoid inputing "p" if interlace wanted
+      } else if ((code == KeyEvent.VK_UP || code == KeyEvent.VK_DOWN) && !notScroll) {
+    	  // avoid inputing the &/( when up or down is pressed
       } else {
          // quick hack for now to prevent those keys from inputting into the chat box
          this.handleKeyPress(code);
       }
+      this.notRotate = false;
 
       if (!ignoreInterlace) {
          if ((char)code == KeyEvent.VK_F1) {
@@ -709,8 +1002,8 @@ public class GameShell {
    }
 
    // $FF: renamed from: a (java.lang.String, int) java.net.Socket
-   public Socket connect(String address, int port) throws IOException {
-      Socket socket = new Socket(address, port);
+   public Socket connect(String address, int port, boolean secure) throws IOException {
+      Socket socket = new Socket(address, port, secure);
       socket.connect();
       //socket.setSoTimeout(30000);
       //socket.setTcpNoDelay(true);
